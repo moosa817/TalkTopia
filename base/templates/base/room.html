@@ -1,6 +1,16 @@
 {% extends 'main.html' %}
 
+
 {%block content %}
+{% load compress %}
+{% load static %}
+{% load tz %}
+
+
+{%compress js%}
+<script src="{% static 'js/chat.js' %}" defer></script>
+{%endcompress%}
+
 <style>
     .room-container {
         display: grid;
@@ -8,6 +18,9 @@
     }
 
 </style>
+<span id="room-id" data-room-id="{{room.id}}" data-user="{{request.user}}"></span>
+
+
 
 <h1>{{room.name}}</h1>
 <hr>
@@ -15,20 +28,25 @@
     <div>
         <h2>Messages</h2>
         <hr>
-        {%for message in room_messages %}
-        <div>
-            <small> @{{message.user}} {{message.updated|timesince}} ago </small>
-            <p>
-                {{message.body}}
-            </p>
-            {%if message.user == request.user %}
-            <a href="{%url 'edit-msg' message.id %}">Edit</a>
-            <a href="{%url 'delete-msg' message.id %}">Delete</a>
+        <div id="chat-messages">
+            {%for message in room_messages %}
+            <div>
+                <small> @{{message.user}},
+                    <span data-time="{{ message.updated|date:'Y-m-d\TH:i:s\Z' }}" class="time-updated">
+                    </span>
+                </small>
+                <p>
+                    {{message.body}}
+                </p>
+                {%if message.user == request.user %}
+                <a href="{%url 'edit-msg' message.id %}">Edit</a>
+                <a href="{%url 'delete-msg' message.id %}">Delete</a>
 
-            {%endif%}
-            <hr>
+                {%endif%}
+                <hr>
+            </div>
+            {%endfor%}
         </div>
-        {%endfor%}
     </div>
     <div>
         <h2>Participants</h2>
@@ -44,11 +62,14 @@
 
 {% if request.user.is_authenticated %}
 <div class="comment-form">
-    <form action="" method="post">
+    <form action="" method="post" id="chat-form">
         {%csrf_token%}
-        <input type="text" name="message" placeholder="Enter Your Message">
+        <input id="chat-input" type="text" name="message" placeholder="Enter Your Message">
     </form>
 </div>
 {%endif%}
+
+
+
 
 {%endblock%}

@@ -81,7 +81,8 @@ Welcome {{user}}, <a href="{% url 'logout' %}">Logout</a>
         <h2>Activity Bar</h2>
         <hr>
         {%for message in room_messages %}
-        <small>@{{message.user}} {{message.updated|timesince}}</small>
+        <small>@{{message.user}} {{message.updated|timesince}} ago in <a
+                href="{%url 'room' message.room.id %}">{{message.room.name}}</a></small>
         <div>
 
             {{message.body}}

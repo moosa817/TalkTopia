@@ -86,6 +86,21 @@ DATABASES = {
 }
 
 
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+    }
+}
+
+# CHANNEL_LAYERS = {
+#     'default': {
+#         'BACKEND': 'channels_redis.core.RedisChannelLayer',
+#         'CONFIG': {
+#             'hosts': [('redis://:hzKHvNr6JUFCVbyzHtKfHvrJQKh1yP2v@redis-17732.c261.us-east-1-4.ec2.cloud.redislabs.com:17732/0')],
+#         },
+#     },
+# }
+
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
