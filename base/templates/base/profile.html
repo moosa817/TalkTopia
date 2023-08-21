@@ -8,7 +8,7 @@
 
 {%for room in rooms%}
 
-<small>@{{room.host}} {{room.updated|timesince}} ago</small>
+<small><a href="{% url 'profile' room.host %}">@{{room.host}}</a> {{room.updated|timesince}} ago</small>
 <div>
     <a href="{% url 'room' room.id %}">{{room}}</a>
 </div>

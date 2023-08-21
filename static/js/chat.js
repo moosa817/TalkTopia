@@ -89,8 +89,8 @@ chatSocket.onopen = function (e) {
 
 chatSocket.onmessage = function (e) {
     let data = JSON.parse(e.data);
+    console.log(data)
     if (data.type === 'message') {
-        console.log(data)
         AddMessage(data.user, data.message)
 
     }

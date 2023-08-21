@@ -31,7 +31,7 @@
         <div id="chat-messages">
             {%for message in room_messages %}
             <div>
-                <small> @{{message.user}},
+                <small> <a href="{% url 'profile' message.user %}">@{{message.user}}</a>,
                     <span data-time="{{ message.updated|date:'Y-m-d\TH:i:s\Z' }}" class="time-updated">
                     </span>
                 </small>

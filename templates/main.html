@@ -7,28 +7,39 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Django + Tailwind CSS + Flowbite</title>
-    <!-- 
-    {% compress css %}
-    <link rel="stylesheet" href="{% static 'src/output.css' %}">
-    {% endcompress %} -->
+    <title>Chat Room</title>
 
+    {% compress css %}
+    <link rel="stylesheet" href="{% static 'css/dist/output.css' %}">
+    <link rel="stylesheet" href="{%static 'css/dist/style.css'%}">
+    {% endcompress %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 </head>
 
-<body class="bg-green-50">
+<body class="bg-green-50 dark:bg-primary-darktheme dark:text-white">
 
+    {%include 'nav.html'%}
 
-
-    <div class="container mx-auto mt-4">
+    {%include 'modals.html'%}
+    <div id="content">
         {% block content %}
         {% endblock content %}
     </div>
 
+
+    {%include 'base/components/modals.html' %}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.7.0/flowbite.min.js"></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js'
         integrity='sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ=='
         crossorigin='anonymous' referrerpolicy='no-referrer'></script>
+
+
+    {%compress js%}
+    <script src="{% static 'js/style.js' %}"></script>
+    {%endcompress%}
 </body>
 
 </html>

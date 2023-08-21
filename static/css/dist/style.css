@@ -1,0 +1,35 @@
+.blurPage {
+    filter: blur(5px)
+}
+
+.trans-btn {
+    width: 15vw;
+    text-align: center;
+    padding: 10px;
+    background: transparent;
+    /* Old browsers */
+    background: linear-gradient(to left, transparent 50%, #51ff0d 50%);
+    background-size: 200% 100%;
+    background-position: right bottom;
+    transition: all .7s ease;
+}
+
+.trans-btn:hover {
+    background-position: left bottom;
+    color: whitesmoke;
+}
+
+
+.trans-btn-full {
+    width: 15vw;
+    text-align: center;
+    padding: 10px;
+    background: transparent;
+    /* Old browsers */
+    background: linear-gradient(to left, transparent 50%, #51ff0d 50%);
+    background-size: 200% 100%;
+    background-position: right bottom;
+    transition: all .7s ease;
+    background-position: left bottom;
+    color: whitesmoke;
+}

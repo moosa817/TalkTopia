@@ -8,26 +8,43 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.http import HttpResponse
+from django.db.models import Count
 # Create your views here.
 
 
 def home(request):
     q = request.GET.get('q') if request.GET.get('q') != None else ''
+    topics_only = request.GET.get(
+        'topic') if request.GET.get('q') != None else ''
 
-    rooms = Room.objects.filter(
-        Q(topic__name__icontains=q) |
-        Q(name__icontains=q) |
-        Q(description__icontains=q)
-    )
-
+    top_topics = Topic.objects.annotate(
+        room_count=Count('room')).order_by('-room_count')[:7]
+    top_topics_name = [topic.name for topic in top_topics]
     topics = Topic.objects.all()
+
+    topics_only = True if topics_only and q in [
+        topic.name for topic in topics] else False
+
+    if topics_only:
+        rooms = Room.objects.filter(
+            Q(topic__name__icontains=q)
+        )
+
+    else:
+        rooms = Room.objects.filter(
+            Q(topic__name__icontains=q) |
+            Q(name__icontains=q) |
+            Q(description__icontains=q)
+        )
+
+    print(topics_only)
     room_count = rooms.count()
     room_messages = Message.objects.filter(
         Q(room__topic__name__icontains=q) | Q(room__name__icontains=q) |
         Q(room__description__icontains=q)).order_by('-updated')
 
     context = {'rooms': rooms, 'topics': topics,
-               'room_count': room_count, 'room_messages': room_messages}
+               'room_count': room_count, 'room_messages': room_messages, 'top_topics': top_topics, 'top_topics_names': top_topics_name, 'q': q, 'topics_only': topics_only}
     return render(request, 'base/home.html', context)
 
 
