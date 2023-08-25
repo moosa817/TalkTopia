@@ -4,10 +4,17 @@
 <html lang="en">
 
 <head>
+    <meta id="current_user" data-user="{{request.user}}">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat Room</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.7.0/flowbite.min.js"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js'
+        integrity='sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ=='
+        crossorigin='anonymous' referrerpolicy='no-referrer'></script>
+
 
     {% compress css %}
     <link rel="stylesheet" href="{% static 'css/dist/output.css' %}">
@@ -22,8 +29,8 @@
 <body class="bg-green-50 dark:bg-primary-darktheme dark:text-white">
 
     {%include 'nav.html'%}
+    {%include 'sidebar.html'%}
 
-    {%include 'modals.html'%}
     <div id="content">
         {% block content %}
         {% endblock content %}
@@ -31,11 +38,7 @@
 
 
     {%include 'base/components/modals.html' %}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.7.0/flowbite.min.js"></script>
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js'
-        integrity='sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ=='
-        crossorigin='anonymous' referrerpolicy='no-referrer'></script>
-
+    {%include 'base/components/alerts.html' %}
 
     {%compress js%}
     <script src="{% static 'js/style.js' %}"></script>

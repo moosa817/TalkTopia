@@ -1,24 +1,119 @@
-{%extends 'main.html'%}
+{% extends 'main.html' %}
+{%load static%}
 
-{%block content%}
+{%block title%}Home page{%endblock%}
+{%block content %}
 
-<center>
-    <h1>{{user}}</h1>
-</center>
 
-{%for room in rooms%}
 
-<small><a href="{% url 'profile' room.host %}">@{{room.host}}</a> {{room.updated|timesince}} ago</small>
-<div>
-    <a href="{% url 'room' room.id %}">{{room}}</a>
+<div class="grid grid-flow-col grid-cols-12">
+
+    <!-- topic -->
+    {% include 'base/components/topics.html'%}
+
+    <div class="md:col-span-7 col-span-12">
+        <div class="flex justify-center mt-10">
+            <img class="w-32 h-32 rounded-full border border-primary-glow-green"
+                src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" alt="user photo">
+        </div>
+        <div class="text-center mt-2 text-xl font-semibold">Your Name</div>
+        <div class="text-center mt-1 text-sm text-primary-glow-green opacity-60">@{{request.user}}</div>
+
+        {% if user.is_authenticated %}
+        <div class="flex justify-center">
+            <button class=" relative inline-flex items-center justify-center mt-2 p-0.5 mb-2 mr-2 overflow-hidden text-sm
+        font-medium
+        text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-primary-glow-green group-hover:from-green-200
+        group-hover:to-blue-600 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-green-200
+        dark:focus:ring-green-800">
+                <span
+                    class="relative px-4 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-primary-darktheme rounded-md group-hover:bg-opacity-0">
+                    Edit Profile
+                </span>
+            </button>
+        </div>
+        {%endif%}
+
+        <div id="MyRooms">
+            <div class="ml-10 mt-10 text-xl text-gray-500 uppercase">rooms hosted by {{request.user}}</div>
+
+            <div class="mx-10 mb-10">
+
+                <div class="md:flex justify-between my-5 items-center">
+
+                    <div class="md:text-lg text-sm text-gray-500">Rooms Available: {{rooms | length}}</div>
+                    <div class="md:my-0 my-2">
+                        <a href="{%url 'create-room' %}?from=profile">
+                            <button type="button"
+                                class="text-white bg-gradient-to-r to-primary-glow-green from-green-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-primary-glow-green dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 hover:scale-110">Create
+                                Room</button>
+                        </a>
+                    </div>
+                </div>
+                {%for room in rooms %}
+
+                <div data-id="{{room.id}}"
+                    class=" items-center bg-white border border-gray-200 rounded-lg w-full hover:bg-gray-100 dark:border-gray-700 dark:bg-primary-darker dark:hover:bg-primary-theme my-5 shadow-md">
+
+
+                    <div class=" p-4 leading-normal">
+                        <div class="flex justify-between">
+                            <div>
+                                <img src="{% static 'img/guest.webp'%}" class="w-6 inline-block rounded-full"
+                                    alt="User pfp">
+                                <a href="{%url 'profile' room.host.id %}" class="text-gray-400">@{{room.host}}</a>
+                            </div>
+                            <div class="text-gray-400 text-sm">
+                                {{room.updated | timesince}} ago
+                            </div>
+                        </div>
+                        <a href="{%url 'room' room.id %}">
+                            <h5 class="my-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
+                                {{room.name}}
+                            </h5>
+                        </a>
+                        <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">{{room.description}}</p>
+                        <hr>
+                        <div class="flex justify-between mt-2">
+                            <div>
+                                <i class="fa-regular fa-user w-3 opacity-50"></i>
+                                {{room.participants.all | length}} Joined
+                            </div>
+                            <a href="/?q={{room.topic}}" class="mt-1">
+                                <span
+                                    class="dark:bg-primary-darktheme bg-gray-300 p-2 rounded-3xl">{{room.topic}}</span>
+                            </a>
+
+
+                        </div>
+                        {% if request.user == room.host %}
+                        <div class="flex justify-end mt-3">
+                            <a class="mx-2" href=" {% url 'update-room' room.id %}?from=profile"><button type="button"
+                                    class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-3 py-2 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 hover:scale-110"><i
+                                        class="fa-solid fa-pen"></i></button></a>
+                            <a data-name="{{room.name}}" data-id="{{room.id}}" class="modal-btn delete-btn"
+                                data-modal-target="small-modal1" data-modal-toggle="small-modal1"><button type=" button"
+                                    class="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-3 py-2 text-center  dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900 hover:scale-1"><i
+                                        class="fa-solid fa-trash"></i></button></a>
+                        </div>
+                        {%endif%}
+
+                    </div>
+                </div>
+                {%endfor%}
+            </div>
+        </div>
+
+
+
+
+    </div>
+
+
+    {% include 'base/components/activity.html' %}
+
 </div>
-{%if request.user == room.host %}
-<a href="{% url 'update-room' room.id %}">edit</a>
-<a href="{% url 'delete-room' room.id %}">Delete</a>
-{%endif%}
-
-<hr>
-{%endfor%}
-
+<script type="text/javascript">     window.CSRF_TOKEN = "{{ csrf_token }}"; </script>
+<script src="{% static 'js/home.js' %}" defer></script>
 
 {%endblock%}

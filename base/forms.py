@@ -4,12 +4,6 @@ import re
 from django.core.exceptions import ValidationError
 
 
-def validate_name(value):
-    if not re.match(r'^[A-Za-z0-9_\.]+$', value):
-        raise ValidationError(
-            'Name can only contain normal characters and _, .')
-
-
 class RoomForm(ModelForm):
     topic = CharField(max_length=200)
 
@@ -22,14 +16,8 @@ class RoomForm(ModelForm):
         topic, created = Topic.objects.get_or_create(name=topic_name)
         return topic
 
-    def clean_name(self):
-        name = self.cleaned_data['name']
-        validate_name(name)
-        return name
-
 
 class MessageForm(ModelForm):
     class Meta:
         model = Message
         fields = ('body',)
-

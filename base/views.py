@@ -7,7 +7,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.db.models import Count
 # Create your views here.
 
@@ -41,7 +41,7 @@ def home(request):
     room_count = rooms.count()
     room_messages = Message.objects.filter(
         Q(room__topic__name__icontains=q) | Q(room__name__icontains=q) |
-        Q(room__description__icontains=q)).order_by('-updated')
+        Q(room__description__icontains=q)).order_by('-updated')[:10]
 
     context = {'rooms': rooms, 'topics': topics,
                'room_count': room_count, 'room_messages': room_messages, 'top_topics': top_topics, 'top_topics_names': top_topics_name, 'q': q, 'topics_only': topics_only}
@@ -70,6 +70,9 @@ def room(request, pk):
 
 @login_required(login_url='login')
 def createRoom(request):
+    from_url = request.GET.get(
+        'from') if request.GET.get('from') else 'home'
+
     if request.method == 'POST':
         form = RoomForm(request.POST)
         if form.is_valid():
@@ -86,18 +89,26 @@ def createRoom(request):
                 name=name,
                 description=description,
             )
-            return redirect('home')
+            if from_url == 'profile':
+                return redirect(from_url, pk=str(request.user))
+            else:
+                return redirect(from_url)
     else:
         form = RoomForm()
 
-    context = {'form': form, 'topics': Topic.objects.all()}
-    return render(request, 'base/room-form.html', context)
+    context = {'form': form, 'from_url': from_url,
+               'topics': Topic.objects.all()}
+    return render(request, 'base/roomform.html', context)
 
 
 @login_required(login_url='login')
 def updateRoom(request, pk):
+    from_url = request.GET.get(
+        'from') if request.GET.get('from') else 'home'
+
     room = Room.objects.get(id=pk)
     form = RoomForm(instance=room)
+    context = {}
     if request.user != room.host:
         return HttpResponse('You are not allowed here')
 
@@ -105,20 +116,36 @@ def updateRoom(request, pk):
         form = RoomForm(request.POST, instance=room)
         if form.is_valid():
             form.save()
-            return redirect('home')
-    context = {'form': form}
-    return render(request, 'base/room-form.html', context)
+            if from_url == 'profile':
+                return redirect(from_url, pk=str(request.user))
+            else:
+                return redirect(from_url)
+    else:
+        # coudnt get current_topic value for html simply(was instead getting id)
+
+        current_topic = form['topic'].value()
+        if current_topic:
+            current_topic = Topic.objects.get(id=current_topic)
+            context = {'form': form, 'updateRoom': True,
+                       'current_topic': current_topic, 'from_url': from_url}
+        else:
+            context = {'form': form, 'updateRoom': False, 'from_url': from_url}
+
+        return render(request, 'base/roomform.html', context)
+
+    return render(request, 'base/roomform.html', context)
 
 
 @login_required(login_url='login')
-def deleteRoom(request, pk):
-    room = Room.objects.get(id=pk)
-    if request.user != room.host:
-        return HttpResponse('You are not allowed here')
+def deleteRoom(request):
     if request.method == 'POST':
+        pk = request.POST.get('room_id')
+        user = request.POST.get('user')
+        if str(request.user) != str(user):
+            return HttpResponse('You are not allowed here')
+        room = Room.objects.get(id=pk)
         room.delete()
-        return redirect('home')
-    return render(request, 'base/delete.html', {'obj': room})
+        return JsonResponse({'success': True})
 
 
 def LoginPage(request):
@@ -199,9 +226,16 @@ def EditMessage(request, pk):
     return render(request, 'base/edit_msg.html', context)
 
 
-def UserProfile(request, user):
-    user = User.objects.get(username=user)
+def UserProfile(request, pk):
+    user = User.objects.get(username=pk)
     rooms = Room.objects.filter(host=user)
-    context = {'user': user, 'rooms': rooms}
+    topics = Topic.objects.all()
+    top_topics = Topic.objects.annotate(
+        room_count=Count('room')).order_by('-room_count')[:7]
 
+    room_messages = Message.objects.filter(user=user).order_by('-updated')[:10]
+
+    context = {'user': user, 'rooms': rooms,
+               'topics': topics, 'top_topics': top_topics,
+               'room_messages': room_messages}
     return render(request, 'base/profile.html', context)

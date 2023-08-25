@@ -1,30 +1,39 @@
 // On page load or when changing themes, best to add inline in `head` to avoid FOUC
 if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
     document.documentElement.classList.add('dark')
+    $('#theme-dark').show()
+    $('#theme-light').hide()
+
 } else {
     document.documentElement.classList.remove('dark')
+    $('#theme-light').show()
+    $('#theme-dark').hide()
+
+
 }
 
-// Whenever the user explicitly chooses light mode
-localStorage.theme = 'light'
+$('#theme-btn').click(function (e) {
+    if (localStorage.theme == 'light') {
+        document.documentElement.classList.add('dark')
+        localStorage.theme = 'dark'
+        $('#theme-dark').show()
+        $('#theme-light').hide()
 
-// Whenever the user explicitly chooses dark mode
-localStorage.theme = 'dark'
+    } else {
+        document.documentElement.classList.remove('dark')
 
-// Whenever the user explicitly chooses to respect the OS preference
-localStorage.removeItem('theme')
+        localStorage.theme = 'light'
+        $('#theme-light').show()
+        $('#theme-dark').hide()
+
+    }
+
+});
 
 
 
 
 
-
-//blur background when modal is opened
-// $('.modal-btn').click(function (e) {
-//     $('body').css('filter', 'blur(5px)')
-
-// });
-// Close the modal when clicking outside of it
 
 
 $('.modal-btn').click(function () {
@@ -64,3 +73,37 @@ $(document).ready(function () {
         }
     });
 });
+
+
+
+// // topic choose btn in roomupdate
+
+var demoInput = document.getElementById('topic-choose');
+if (demoInput != null) {
+    let current_topic = $('#current_topic').data('topic')
+    demoInput.value = current_topic
+    demoInput.onfocus = function () { demoInput.value = ''; };
+
+}
+
+
+
+
+// hiding alerts and stuff
+
+
+$('.hide-alert').click(function () {
+    $(this).hide()
+})
+
+
+
+
+
+// fadeout these elemtns
+
+function removeFadeOut() {
+    $('div[name=fadeOut]').delay(12000).fadeOut('fast');
+}
+
+setInterval(removeFadeOut, 1000);
