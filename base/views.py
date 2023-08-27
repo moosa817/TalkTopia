@@ -17,14 +17,6 @@ def home(request):
     topics_only = request.GET.get(
         'topic') if request.GET.get('q') != None else ''
 
-    top_topics = Topic.objects.annotate(
-        room_count=Count('room')).order_by('-room_count')[:7]
-    top_topics_name = [topic.name for topic in top_topics]
-    topics = Topic.objects.all()
-
-    topics_only = True if topics_only and q in [
-        topic.name for topic in topics] else False
-
     if topics_only:
         rooms = Room.objects.filter(
             Q(topic__name__icontains=q)
@@ -36,15 +28,8 @@ def home(request):
             Q(name__icontains=q) |
             Q(description__icontains=q)
         )
-
-    print(topics_only)
-    room_count = rooms.count()
-    room_messages = Message.objects.filter(
-        Q(room__topic__name__icontains=q) | Q(room__name__icontains=q) |
-        Q(room__description__icontains=q)).order_by('-updated')[:10]
-
-    context = {'rooms': rooms, 'topics': topics,
-               'room_count': room_count, 'room_messages': room_messages, 'top_topics': top_topics, 'top_topics_names': top_topics_name, 'q': q, 'topics_only': topics_only}
+    context = {'rooms': rooms,
+               'q': q, 'topics_only': topics_only}
     return render(request, 'base/home.html', context)
 
 
@@ -52,15 +37,6 @@ def room(request, pk):
     room = Room.objects.get(id=pk)
     room_messages = room.message_set.all()
     participants = room.participants.filter()
-
-    if request.method == 'POST':
-        message = Message.objects.create(
-            user=request.user,
-            room=room,
-            body=request.POST.get('message')
-        )
-        room.participants.add(request.user)
-        return redirect('room', pk=room.id)
 
     context = {'room': room, 'room_messages': room_messages,
                'participants': participants}
@@ -74,21 +50,26 @@ def createRoom(request):
         'from') if request.GET.get('from') else 'home'
 
     if request.method == 'POST':
+        print(request.POST)
         form = RoomForm(request.POST)
         if form.is_valid():
             name = form.cleaned_data['name']
             description = form.cleaned_data['description']
-
+            private = form.cleaned_data['private']
+            print(private, type(private))
             # Separate handling for topic creation
             topic_name = request.POST.get('topic')
             topic, created = Topic.objects.get_or_create(name=topic_name)
 
-            Room.objects.create(
+            room = Room.objects.create(
                 host=request.user,
                 topic=topic,
                 name=name,
                 description=description,
+                private=private
             )
+
+            room.participants.add(request.user)
             if from_url == 'profile':
                 return redirect(from_url, pk=str(request.user))
             else:
@@ -229,13 +210,15 @@ def EditMessage(request, pk):
 def UserProfile(request, pk):
     user = User.objects.get(username=pk)
     rooms = Room.objects.filter(host=user)
-    topics = Topic.objects.all()
-    top_topics = Topic.objects.annotate(
-        room_count=Count('room')).order_by('-room_count')[:7]
 
-    room_messages = Message.objects.filter(user=user).order_by('-updated')[:10]
-
-    context = {'user': user, 'rooms': rooms,
-               'topics': topics, 'top_topics': top_topics,
-               'room_messages': room_messages}
+    context = {'user': user, 'rooms': rooms}
     return render(request, 'base/profile.html', context)
+
+
+@login_required(login_url='login')
+def JoinedRooms(request):
+    user_id = request.user.id
+
+    rooms = Room.objects.filter(participants=user_id)
+    context = {'rooms': rooms}
+    return render(request, 'base/joined_rooms.html', context)

@@ -16,14 +16,14 @@
 
                     </div>
                     <div class="bg-green-400 rounded-2xl text-xs text-gray-300 font-thin p-2 self-center ml-1">
-                        {{rooms.count}}
+                        {{info.room_count}}
                     </div>
                 </div>
             </a>
 
             <hr class=" border-primary-glow-green border-[-.5px] opacity-50">
 
-            {%for topic in top_topics%}
+            {%for topic in info.top_topics%}
             <a href="/?q={{topic}}&topic=True">
                 <div class="flex justify-between">
 
@@ -44,7 +44,7 @@
             {%endfor%}
 
 
-            {%if q not in top_topics_names and topics_only == True %}
+            {%if q not in info.top_topics_names and topics_only == True %}
             <a href="/?q={{q}}&topic=True">
 
                 <div class="flex justify-between">
@@ -53,7 +53,7 @@
 
                     </div>
                     <div class="bg-green-400 rounded-2xl text-xs text-gray-300 font-thin p-2 self-center ml-1">
-                        {% for topic in topics %}
+                        {% for topic in info.topics %}
                         {% if topic.name == q %}
                         {{topic.room_set.all.count}}
 
@@ -74,7 +74,7 @@
 
                     </div>
                     <div class="bg-green-400 rounded-2xl text-xs text-gray-300 font-thin p-2 self-center ml-1">
-                        {{topics.count|add:"-5"}}
+                        {{info.topics.count|add:"-5"}}
                     </div>
                 </div>
             </button>

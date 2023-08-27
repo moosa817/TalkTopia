@@ -12,6 +12,6 @@ urlpatterns = [
     path('register/', views.RegisterPage, name='register'),
     path('delete-msg/<str:pk>', views.deleteMessage, name='delete-msg'),
     path('edit-msg/<str:pk>', views.EditMessage, name='edit-msg'),
-    path('profile/<str:pk>', views.UserProfile, name='profile')
-
+    path('profile/<str:pk>', views.UserProfile, name='profile'),
+    path('joined-rooms', views.JoinedRooms, name='joined-rooms')
 ]

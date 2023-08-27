@@ -17,6 +17,8 @@ class Room(models.Model):
     participants = models.ManyToManyField(
         User, related_name='participants', blank=True)
     description = models.TextField(blank=True, null=True)
+    private = models.BooleanField(default=False)
+
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
 

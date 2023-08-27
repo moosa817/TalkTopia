@@ -9,7 +9,7 @@ class RoomForm(ModelForm):
 
     class Meta:
         model = Room
-        fields = ['name', 'topic', 'description']
+        fields = ['name', 'topic', 'description', 'private']
 
     def clean_topic(self):
         topic_name = self.cleaned_data['topic']

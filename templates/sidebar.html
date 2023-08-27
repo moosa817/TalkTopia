@@ -1,5 +1,5 @@
 <div id="drawer-navigation"
-    class="z-50 fixed top-0 left-0  w-64 h-screen p-4 overflow-y-auto transition-transform -translate-x-full bg-white dark:bg-gray-800"
+    class="z-[101] fixed top-0 left-0  w-64 h-screen p-4 overflow-y-auto transition-transform -translate-x-full bg-white dark:bg-gray-800"
     tabindex="-1" aria-labelledby="drawer-navigation-label">
 
     <button type="button" data-drawer-hide="drawer-navigation" aria-controls="drawer-navigation"
@@ -32,7 +32,7 @@
             <hr>
             {%if request.user.is_authenticated%}
             <li>
-                <a href="#"
+                <a href="{%url 'joined-rooms'%}"
                     class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                     <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
                         aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">

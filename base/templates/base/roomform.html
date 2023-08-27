@@ -100,6 +100,36 @@
                 <div class="text-xs text-red-700">{{ form.errors.description }}</div>
                 {% endif %}
             </div>
+            <div class="flex mb-4">
+                <div>
+                    <input checked id="default-radio-1" type="radio" value="False" name="private"
+                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                    <label for="default-radio-1"
+                        class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Public Room</label>
+
+                </div>
+                {%if 1 %}
+                <div class="ml-10">
+                    <input id="default-radio-2" type="radio" value="True" name="private"
+                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                    <label for="default-radio-2"
+                        class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Private
+                        Room </label>
+                </div>
+                {%else%}
+                <div class=" ml-10">
+                    <input disabled id="default-radio-2" type="radio" value="True" name="private"
+                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                    <label for="default-radio-2"
+                        class="ml-2 text-xs opacity-50 font-medium text-gray-900 dark:text-gray-300">Private Room
+                        (Signup To Use
+                        This)</label>
+                </div>
+                {%endif%}
+
+            </div>
+
+
             <div class="w-full pt-2">
 
                 <button type="submit"
@@ -112,6 +142,9 @@
 
                 </button>
             </div>
+
+
+
         </form>
 
 

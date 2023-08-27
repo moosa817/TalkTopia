@@ -26,7 +26,7 @@
 
 <!-- Large Modal  for topics -->
 <div id="large-modal" tabindex="-1"
-    class="blur-modal fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    class="blur-modal fixed top-0 left-0 right-0 z-[102] hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
     <div class="relative w-full max-w-4xl max-h-full">
         <!-- Modal content -->
         <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
@@ -50,7 +50,7 @@
             <div class="p-6 space-y-6">
                 <hr class=" border-primary-glow-green border-[-.5px] opacity-50">
 
-                {%for topic in topics%}
+                {%for topic in info.topics%}
                 <a href="/?q={{topic}}&topic=True">
                     <div class="flex justify-between">
 

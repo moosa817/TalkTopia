@@ -48,9 +48,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         # Check if the user matches self.scope.get('user')
 
-        print("here")
         room = await sync_to_async(Room.objects.get)(id=self.room_id)
         user1 = await sync_to_async(User.objects.get)(username=user)
+        await sync_to_async(room.participants.add)(user1)
+
         await sync_to_async(Message.objects.create)(
             room=room,
             user=user1,
