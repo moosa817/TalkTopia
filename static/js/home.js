@@ -33,3 +33,25 @@ $('#confirm-delete-btn').click(function (e) {
         })
 
 });
+
+
+//filter on change
+
+$('#dropdownRadio input').change(function (e) {
+    e.preventDefault();
+    let filter_value = $('input[name="filter"]:checked').val()
+
+    if (filter_value === 'private') {
+        $('#dropdownRadioButton span').text("Private Rooms")
+        $('.rooms').hide()
+        $('.locked').closest('.rooms').fadeIn();
+
+    } else if (filter_value === 'all') {
+        $('#dropdownRadioButton span').text("All Rooms")
+        $('.locked').closest('.rooms').fadeOut();
+        $('.rooms').fadeIn()
+
+    }
+
+
+});

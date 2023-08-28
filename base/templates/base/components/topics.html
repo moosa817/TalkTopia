@@ -8,7 +8,7 @@
 
         <hr class=" border-primary-glow-green border-[-.5px] opacity-50">
         <div id="topics" class="text-center text-md text-green-700 dark:bg-primary-darktheme font-semibold">
-            <a href="/">
+            <a href="/" data-q="home">
 
                 <div class="flex justify-between">
                     <div class="trans-btn the-btn">
@@ -16,7 +16,7 @@
 
                     </div>
                     <div class="bg-green-400 rounded-2xl text-xs text-gray-300 font-thin p-2 self-center ml-1">
-                        {{info.room_count}}
+                        {{info.room_count | add:"-1"}}
                     </div>
                 </div>
             </a>
@@ -24,7 +24,7 @@
             <hr class=" border-primary-glow-green border-[-.5px] opacity-50">
 
             {%for topic in info.top_topics%}
-            <a href="/?q={{topic}}&topic=True">
+            <a href="/?q={{topic}}&topic=True" data-q="{{topic}}">
                 <div class="flex justify-between">
 
                     <div class="trans-btn the-btn">
@@ -32,7 +32,7 @@
 
                     </div>
                     <div class="bg-green-400 rounded-2xl text-xs font-thin text-gray-300 p-2 self-center ml-1">
-                        {{topic.room_set.all.count}}
+                        {{topic.room_set.all.count|add:"-1"}}
                     </div>
                 </div>
             </a>

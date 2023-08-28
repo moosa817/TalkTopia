@@ -66,11 +66,20 @@ $(document).keyup(function (e) {
 //topic btn
 $(document).ready(function () {
     $("#topics a").each(function () {
-        if ($(this).attr('href') == '/' + window.location.search) {
-            $(this).css("background", "orange !important");
+        console.log($(this).attr('data-q'))
+        var url_string = window.location.href;
+        var url = new URL(url_string);
+        var q = url.searchParams.get("q");
+
+        if ($(this).attr('data-q') == q) {
+            $(this).find('div.the-btn').removeClass('trans-btn');
+            $(this).find('div.the-btn').addClass('trans-btn-full');
+        } else if ($(this).attr('data-q') == 'home' && q == null) {
+            console.log('here')
             $(this).find('div.the-btn').removeClass('trans-btn');
             $(this).find('div.the-btn').addClass('trans-btn-full');
         }
+
     });
 });
 

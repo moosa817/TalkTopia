@@ -1,17 +1,18 @@
 from django.urls import path
-from . import views
+# views folder
+from .views import home, profile, room_messages, register_login, profile, rooms
 
 urlpatterns = [
-    path('', views.home, name='home'),
-    path('room/<str:pk>', views.room, name='room'),
-    path('create-room/', views.createRoom, name='create-room'),
-    path('update-room/<str:pk>', views.updateRoom, name='update-room'),
-    path('delete-room', views.deleteRoom, name='delete-room'),
-    path('login/', views.LoginPage, name='login'),
-    path('logout/', views.LogoutPage, name='logout'),
-    path('register/', views.RegisterPage, name='register'),
-    path('delete-msg/<str:pk>', views.deleteMessage, name='delete-msg'),
-    path('edit-msg/<str:pk>', views.EditMessage, name='edit-msg'),
-    path('profile/<str:pk>', views.UserProfile, name='profile'),
-    path('joined-rooms', views.JoinedRooms, name='joined-rooms')
+    path('', home.home, name='home'),
+    path('room/<str:pk>', room_messages.room, name='room'),
+    path('create-room/', rooms.createRoom, name='create-room'),
+    path('update-room/<str:pk>', rooms.updateRoom, name='update-room'),
+    path('delete-room', rooms.deleteRoom, name='delete-room'),
+    path('login/', register_login.LoginPage, name='login'),
+    path('logout/', register_login.LogoutPage, name='logout'),
+    path('register/', register_login.RegisterPage, name='register'),
+    path('delete-msg/<str:pk>', room_messages.deleteMessage, name='delete-msg'),
+    path('edit-msg/<str:pk>', room_messages.EditMessage, name='edit-msg'),
+    path('profile/<str:pk>', profile.UserProfile, name='profile'),
+    path('joined-rooms', profile.JoinedRooms, name='joined-rooms')
 ]
