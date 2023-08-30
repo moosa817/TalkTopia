@@ -7,45 +7,44 @@ from django.db.models import Count
 
 def home(request):
 
-    q = request.GET.get('q') if request.GET.get('q') != None else ''
+    q = request.GET.get('q') if request.GET.get('q') else ''
     topics_only = request.GET.get(
-        'topic') if request.GET.get('q') != None else ''
+        'topic') if request.GET.get('q') else ''
+    page = int(request.GET.get('page')) if request.GET.get('page') else 1
 
-    if not request.GET.get('page'):
-        page = 1
-    else:
-        page = request.GET.get('page')
-        page = int(page)
+    order_by = '-updated' if request.GET.get(
+        'filter') == 'recent' else 'participants'
 
-    if not request.GET.get('filter'):
-        filter_by = 'popular'
-    else:
-        filter_by = 'recent'
+    rooms = Room.objects.filter().order_by(order_by)
 
     one_page = 10
     end_page = page * one_page
-    start_page = end_page - 10
-
-    print(start_page, end_page)
+    start_page = end_page - one_page
 
     if topics_only:
-        rooms = Room.objects.filter(
+        rooms = rooms.filter(
             Q(topic__name__icontains=q)
         )
 
     else:
-        rooms = Room.objects.filter(
+        rooms = rooms.filter(
             Q(topic__name__icontains=q) |
             Q(name__icontains=q) |
             Q(description__icontains=q)
         )
 
-    rooms = rooms.filter(Q(private=False) | Q(
-        participants=int(request.user.id)))
+    if request.user.is_authenticated:
+        rooms = rooms.filter(Q(private=False) | Q(
+            participants=int(request.user.id)))
+    else:
+        rooms = rooms.filter(private=False)
 
-    room_count = rooms.count()
+    rooms = list(dict.fromkeys(rooms))
+    room_count = len(rooms)
+
     rooms = rooms[start_page:end_page]
+    last_page = room_count//one_page + (room_count % one_page > 0)
 
     context = {'rooms': rooms,
-               'q': q, 'topics_only': topics_only, 'room_count': room_count}
+               'q': q, 'topics_only': topics_only, 'room_count': room_count, 'last_page': last_page}
     return render(request, 'base/home.html', context)

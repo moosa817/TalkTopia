@@ -55,3 +55,120 @@ $('#dropdownRadio input').change(function (e) {
 
 
 });
+
+
+//pagess
+nextPage = $('#nextPage')
+previousPage = $('#previousPage')
+
+var url_string = window.location.href;
+var url = new URL(url_string);
+var page = parseInt(url.searchParams.get("page"));
+
+let page_param;
+
+if (!page) {
+    page_param = false
+    previousPage.hide()
+    page = 1
+}
+
+
+let a = 0;
+let first_link;
+let first_no;
+let final_no;
+
+$('#btn-numbers a').each(function (index, element) {
+    let link = $(this)
+
+    if (a < 1) {
+        link.text(page)
+        link.attr('href', window.location.href);
+
+        first_link = link
+        first_no = parseInt(first_link.text())
+    }
+    else {
+        first_no += 1
+
+        if (first_no <= last_page) {
+            final_no = first_no
+            link.text(first_no)
+            var url = new URL(window.location.href);
+            if (page_param) {
+                url.searchParams.append('page', first_no);
+
+            } else {
+                url.searchParams.set('page', first_no);
+
+            }
+
+            link.attr('href', url);
+        }
+        else {
+            link.hide()
+        }
+    }
+    a += 1
+});
+
+if (page < last_page && final_no != last_page) {
+    nextPage.show()
+}
+else {
+    nextPage.hide()
+}
+
+var url = new URL(window.location.href);
+if (page_param) {
+    url.searchParams.append('page', page + 1);
+
+} else {
+    url.searchParams.set('page', page + 1);
+}
+nextPage.attr('href', url)
+
+
+
+if (page > 1) {
+    var url = new URL(window.location.href);
+    if (page_param) {
+        url.searchParams.append('page', page - 1);
+
+    } else {
+        url.searchParams.set('page', page - 1);
+    }
+    previousPage.attr('href', url)
+} else {
+    previousPage.hide()
+}
+
+
+//filter
+
+let recent = $('#recent')
+let popular = $('#popular')
+
+let currentUrl = new URL(window.location.href);
+
+if (!currentUrl.searchParams.get("filter")) {
+    currentUrl.searchParams.append("filter", "popular")
+    popular.attr('href', currentUrl)
+
+    currentUrl.searchParams.delete("filter")
+
+    currentUrl.searchParams.append("filter", "recent")
+    recent.attr('href', currentUrl)
+
+} else {
+    console.log("here")
+    currentUrl.searchParams.set("filter", "popular")
+    popular.attr('href', currentUrl)
+
+    currentUrl.searchParams.delete("filter")
+
+    currentUrl.searchParams.set("filter", "recent")
+    recent.attr('href', currentUrl)
+
+}

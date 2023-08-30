@@ -7,7 +7,6 @@
 
 
 <div class="grid grid-flow-col grid-cols-12">
-
     <!-- topic -->
     {% include 'base/components/topics.html'%}
 
@@ -65,7 +64,37 @@
                 </div>
 
 
+                <div>
+                    <button id="Filterdropdown" data-dropdown-toggle="filter-dropdown"
+                        class=" focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center  "
+                        type="button">
+                        <svg class="w-6 h-6 dark:fill-white fill-black" viewBox="0 0 32 32" version="1.1"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <title>bars-filter</title>
+                            <path
+                                d="M30 6.749h-28c-0.69 0-1.25 0.56-1.25 1.25s0.56 1.25 1.25 1.25v0h28c0.69 0 1.25-0.56 1.25-1.25s-0.56-1.25-1.25-1.25v0zM24 14.75h-16c-0.69 0-1.25 0.56-1.25 1.25s0.56 1.25 1.25 1.25v0h16c0.69 0 1.25-0.56 1.25-1.25s-0.56-1.25-1.25-1.25v0zM19 22.75h-6.053c-0.69 0-1.25 0.56-1.25 1.25s0.56 1.25 1.25 1.25v0h6.053c0.69 0 1.25-0.56 1.25-1.25s-0.56-1.25-1.25-1.25v0z">
+                            </path>
+                        </svg> </button>
+                    <!-- Dropdown menu -->
+                    <div id="filter-dropdown"
+                        class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+                        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200"
+                            aria-labelledby="dropdownDefaultButton">
+                            <li>
+                                <a id="popular"
+                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Most
+                                    Popular</a>
+                            </li>
 
+                            <li>
+                                <a id="recent"
+                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Recent</a>
+                            </li>
+
+                        </ul>
+                    </div>
+
+                </div>
 
                 <div class="md:my-0 my-2 ml-auto">
                     <a href="{%url 'create-room' %}">
@@ -136,7 +165,32 @@
 
 
 
+        <div id="page-btns" class="justify-center flex mb-10">
+            <div>
+                <a id="previousPage" href="#"
+                    class="px-3.5 py-2 mx-3 dark:bg-gray-800 bg-gray-200 rounded shadow-xl font-semibold">
+                    <i class="fa-solid fa-arrow-left"></i> </a>
+            </div>
+            <div id="btn-numbers">
+                <a href="."
+                    class="px-3.5 py-2 md:mx-3 mx-1 bg-gray-200 dark:bg-gray-800 rounded shadow-xl font-semibold ">1</a>
+                <a href="#"
+                    class="bg-gray-200 px-3.5 py-2 md:mx-3 mx-1 dark:bg-gray-800 rounded shadow-xl font-semibold">2</a>
+                <a href="#"
+                    class="bg-gray-200 px-3.5 py-2 md:mx-3 mx-1 dark:bg-gray-800 rounded shadow-xl font-semibold">3</a>
+                <a href="#"
+                    class="px-3.5 bg-gray-200 py-2 md:mx-3 mx-1 dark:bg-gray-800 rounded shadow-xl font-semibold">4</a>
+                <a href="#"
+                    class="px-3.5 bg-gray-200 py-2 md:mx-3 mx-1 dark:bg-gray-800 rounded shadow-xl font-semibold">5</a>
+            </div>
 
+            <div>
+                <a id="nextPage" href="#"
+                    class="px-3.5 bg-gray-200 py-2 mx-3 dark:bg-gray-800 rounded shadow-xl font-semibold"> <i
+                        class="fa-solid fa-arrow-right"></i> </a>
+
+            </div>
+        </div>
 
     </div>
 
@@ -144,6 +198,9 @@
     {% include 'base/components/activity.html' %}
 
 </div>
+<script>
+    const last_page = parseInt('{{ last_page }}')
+</script>
 <script type="text/javascript">     window.CSRF_TOKEN = "{{ csrf_token }}"; </script>
 <script src="{% static 'js/home.js' %}" defer></script>
 
