@@ -1,7 +1,5 @@
 from django.forms import ModelForm, CharField
-from .models import Room, Message, Topic
-import re
-from django.core.exceptions import ValidationError
+from .models import Room, Message, Topic, UserProfile
 
 
 class RoomForm(ModelForm):
@@ -21,3 +19,10 @@ class MessageForm(ModelForm):
     class Meta:
         model = Message
         fields = ('body',)
+
+
+class ProfileCreationForm(ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = [
+            'name', 'email']

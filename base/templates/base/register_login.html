@@ -23,8 +23,29 @@ Don't have an account , <a href="{% url 'register' %}">Signup</a>
 
 <form action="" method="post">
     {%csrf_token%}
+    <!-- 
+    Username:{{UserForm.username}}<br>
+    Passowrd: {{UserForm.password1}}<br>
+    re Paassword: {{UserForm.password2}}<br> -->
 
-    {{form.as_p}}
+    username: {{UserForm.username}} <br>
+    {% if UserForm.errors.username %}
+    <div class="text-xs text-red-700">{{ form.errors.description }}</div>
+    {% endif %}
+
+    pwd: {{UserForm.password1}} <br>
+    {% if UserForm.errors.password1 %}
+    <div class="text-xs text-red-700">{{ form.errors.password1 }}</div>
+    {% endif %}
+
+    pwd2: {{UserForm.password2}} <br>
+    {% if UserForm.errors.password2 %}
+    <div class="text-xs text-red-700">{{ form.errors.password2 }}</div>
+    {% endif %}
+
+
+    {{ProfileForm.as_p}}
+
     <input type="submit" value="Register">
 </form>
 {%endif%}

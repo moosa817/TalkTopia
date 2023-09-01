@@ -14,5 +14,6 @@ urlpatterns = [
     path('delete-msg/<str:pk>', room_messages.deleteMessage, name='delete-msg'),
     path('edit-msg/<str:pk>', room_messages.EditMessage, name='edit-msg'),
     path('profile/<str:pk>', profile.UserProfile, name='profile'),
-    path('joined-rooms', profile.JoinedRooms, name='joined-rooms')
+    path('joined-rooms', profile.JoinedRooms, name='joined-rooms'),
+    path('account', profile.AccountSettings, name='account')
 ]

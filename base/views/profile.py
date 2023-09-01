@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from ..models import Room, Topic, Message
-from ..forms import RoomForm, MessageForm
+from ..forms import RoomForm, MessageForm, ProfileCreationForm
 from django.db.models import Q
 from django.contrib.auth.models import User
 from django.contrib import messages
@@ -27,3 +27,9 @@ def JoinedRooms(request):
     rooms = Room.objects.filter(participants=user_id)
     context = {'rooms': rooms}
     return render(request, 'base/joined_rooms.html', context)
+
+
+@login_required(login_url='login')
+def AccountSettings(request):
+    context = {}
+    return render(request, 'base/account_settings.html', context)

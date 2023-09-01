@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from ..models import Room, Topic, Message
-from ..forms import RoomForm, MessageForm
+from ..models import Room, Topic, Message, UserProfile
+from ..forms import RoomForm, MessageForm, ProfileCreationForm
 from django.db.models import Q
 from django.contrib.auth.models import User
 from django.contrib import messages
@@ -37,22 +37,32 @@ def LoginPage(request):
 
 
 def RegisterPage(request):
-    form = UserCreationForm()
-    context = {'form': form}
     if request.user.is_authenticated:
         return redirect('home')
 
+    ProfileForm = ProfileCreationForm()
+    UserForm = UserCreationForm()
+
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            user = form.save(commit=False)
+        UserForm = UserCreationForm(request.POST)
+        ProfileForm = ProfileCreationForm(request.POST)
+
+        if ProfileForm.is_valid() and UserForm.is_valid():
+            print("here")
+            user = UserForm.save(commit=False)
             user.username = user.username.lower()
             user.save()
+
+            profile = UserProfile.objects.create(
+                username=user,
+                name=request.POST.get('name'),
+                email=request.POST.get('email'),
+            )
+
             login(request, user)
             return redirect('home')
-        else:
-            messages.error(request, 'An error occurred during registration')
 
+    context = {'UserForm': UserForm, 'ProfileForm': ProfileForm}
     return render(request, 'base/register_login.html', context)
 
 

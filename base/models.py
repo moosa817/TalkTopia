@@ -3,6 +3,19 @@ from django.contrib.auth.models import User
 # Create your models here.
 
 
+class UserProfile(models.Model):
+    username = models.OneToOneField(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=200)
+    email = models.EmailField(unique=True)
+    pfp = models.ImageField(upload_to='uploads/',
+                            default='static/img/guest.webp')
+    bio = models.TextField(null=True, blank=True)
+    guest = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.name
+
+
 class Topic(models.Model):
     name = models.CharField(max_length=200)
 
