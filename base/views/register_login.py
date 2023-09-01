@@ -23,8 +23,10 @@ def LoginPage(request):
         password = request.POST.get('password')
         try:
             user = User.objects.get(username=username)
+            user = User.objects.get(email=username)
+            username = user.username
         except:
-            messages.error(request, 'User does not exist')
+            messages.error(request, 'Username or Email does not exist')
 
         user = authenticate(request, username=username, password=password)
         if user is not None:
@@ -48,7 +50,6 @@ def RegisterPage(request):
         ProfileForm = ProfileCreationForm(request.POST)
 
         if ProfileForm.is_valid() and UserForm.is_valid():
-            print("here")
             user = UserForm.save(commit=False)
             user.username = user.username.lower()
             user.save()
@@ -56,11 +57,15 @@ def RegisterPage(request):
             profile = UserProfile.objects.create(
                 username=user,
                 name=request.POST.get('name'),
-                email=request.POST.get('email'),
+                email=request.POST.get('email').lower(),
             )
 
             login(request, user)
             return redirect('home')
+
+        else:
+            UserForm = UserCreationForm(request.POST)
+            ProfileForm = ProfileCreationForm(request.POST)
 
     context = {'UserForm': UserForm, 'ProfileForm': ProfileForm}
     return render(request, 'base/register_login.html', context)

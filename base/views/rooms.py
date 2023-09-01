@@ -43,7 +43,7 @@ def createRoom(request):
             else:
                 return redirect(from_url)
     else:
-        form = RoomForm()
+        form = RoomForm(request.POST)
 
     context = {'form': form, 'from_url': from_url,
                'topics': Topic.objects.all()}
