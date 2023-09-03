@@ -18,7 +18,6 @@ def createRoom(request):
         'from') if request.GET.get('from') else 'home'
 
     if request.method == 'POST':
-        print(request.POST)
         form = RoomForm(request.POST)
         if form.is_valid():
             name = form.cleaned_data['name']
@@ -43,7 +42,7 @@ def createRoom(request):
             else:
                 return redirect(from_url)
     else:
-        form = RoomForm(request.POST)
+        form = RoomForm()
 
     context = {'form': form, 'from_url': from_url,
                'topics': Topic.objects.all()}

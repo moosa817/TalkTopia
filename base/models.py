@@ -7,8 +7,7 @@ class UserProfile(models.Model):
     username = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=200)
     email = models.EmailField(unique=True)
-    pfp = models.ImageField(upload_to='uploads/',
-                            default='static/img/guest.webp')
+    pfp = models.ImageField(upload_to='images/', null=True)
     bio = models.TextField(null=True, blank=True)
     guest = models.BooleanField(default=False)
 

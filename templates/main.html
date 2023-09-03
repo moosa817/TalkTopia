@@ -33,6 +33,9 @@
 
     {%include 'nav.html'%}
     {%include 'sidebar.html'%}
+    {%include 'base/components/modals.html' %}
+    {%include 'base/components/alerts.html' %}
+
 
     <div id="content">
         {% block content %}
@@ -40,8 +43,6 @@
     </div>
 
 
-    {%include 'base/components/modals.html' %}
-    {%include 'base/components/alerts.html' %}
 
     {%compress js%}
     <script src="{% static 'js/style.js' %}"></script>

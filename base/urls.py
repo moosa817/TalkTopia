@@ -1,6 +1,8 @@
 from django.urls import path
 # views folder
 from .views import home, profile, room_messages, register_login, profile, rooms
+from django.conf.urls.static import static
+from django.conf import settings
 
 urlpatterns = [
     path('', home.home, name='home'),
@@ -13,7 +15,8 @@ urlpatterns = [
     path('register/', register_login.RegisterPage, name='register'),
     path('delete-msg/<str:pk>', room_messages.deleteMessage, name='delete-msg'),
     path('edit-msg/<str:pk>', room_messages.EditMessage, name='edit-msg'),
-    path('profile/<str:pk>', profile.UserProfile, name='profile'),
+    path('profile/<str:pk>', profile.Profile, name='profile'),
     path('joined-rooms', profile.JoinedRooms, name='joined-rooms'),
-    path('account', profile.AccountSettings, name='account')
-]
+    path('account', profile.AccountSettings, name='account'),
+
+]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -21,19 +21,23 @@ def LoginPage(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
+        context = {'page': page, 'username': username, 'password': password}
         try:
             user = User.objects.get(username=username)
-            user = User.objects.get(email=username)
-            username = user.username
         except:
-            messages.error(request, 'Username or Email does not exist')
+            try:
+                user = UserProfile.objects.get(email=username)
+                username = user.username
+            except:
+                messages.error(request, 'Username or Email does not exist')
+                return render(request, 'base/register_login.html', context)
 
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
             return redirect('home')
         else:
-            messages.error(request, 'Username or password does not exist')
+            messages.error(request, 'Wrong Password')
 
     return render(request, 'base/register_login.html', context)
 
@@ -41,9 +45,6 @@ def LoginPage(request):
 def RegisterPage(request):
     if request.user.is_authenticated:
         return redirect('home')
-
-    ProfileForm = ProfileCreationForm()
-    UserForm = UserCreationForm()
 
     if request.method == 'POST':
         UserForm = UserCreationForm(request.POST)
@@ -63,9 +64,9 @@ def RegisterPage(request):
             login(request, user)
             return redirect('home')
 
-        else:
-            UserForm = UserCreationForm(request.POST)
-            ProfileForm = ProfileCreationForm(request.POST)
+    else:
+        UserForm = UserCreationForm()
+        ProfileForm = ProfileCreationForm()
 
     context = {'UserForm': UserForm, 'ProfileForm': ProfileForm}
     return render(request, 'base/register_login.html', context)
