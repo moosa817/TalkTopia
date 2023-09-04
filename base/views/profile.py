@@ -1,3 +1,5 @@
+from django.contrib.auth import password_validation
+from django.forms import ValidationError
 from django.shortcuts import render, redirect
 from ..models import Room, Topic, Message, UserProfile
 from ..forms import ProfileEditform, CustomUserChangeForm
@@ -68,15 +70,19 @@ def AccountSettings(request):
                     elif new_password == old_password:
                         userForm.add_error(
                             'new_password', "New password can't be the same as old one")
-                    elif len(new_password) < 8:
-                        userForm.add_error(
-                            'new_password', "New password must be above 8 characters")
                     else:
-                        request.user.set_password(new_password)
-                        request.user.save()
-                        update_session_auth_hash(request, request.user)
-                        messages.success(
-                            request, 'Password Sucessfully Changed')
+                        try:
+                            password_validation.validate_password(new_password)
+                        except ValidationError as e:
+                            userForm.add_error(
+                                'new_password', e)
+
+                        else:
+                            request.user.set_password(new_password)
+                            request.user.save()
+                            update_session_auth_hash(request, request.user)
+                            messages.success(
+                                request, 'Password Sucessfully Changed')
 
                 else:
                     # Old password is incorrect, show an error message

@@ -1,3 +1,4 @@
+
 """
 Django settings for chatroom project.
 
@@ -11,8 +12,13 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+from dotenv import load_dotenv
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+load_dotenv(BASE_DIR / '.env')
 
 
 # Quick-start development settings - unsuitable for production
@@ -40,6 +46,13 @@ INSTALLED_APPS = [
     'base.apps.BaseConfig',
     'compressor',
     'widget_tweaks',
+    'guest_user'
+]
+
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+    # it should be the last entry to prevent unauthorized access
+    "guest_user.backends.GuestBackend",
 ]
 
 MIDDLEWARE = [

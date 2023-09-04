@@ -45,6 +45,9 @@
                     name="password" placeholder="Enter Password" value="{{password}}" autocomplete="off" />
             </div>
 
+            <div class="text-xs mb-2 text-blue-500 underline float-right"><a href="{%url 'forgot'%}">Forgot
+                    password?</a></div>
+
             <button type="submit"
                 class="text-white bg-gradient-to-r w-full to-primary-glow-green from-green-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-primary-glow-green dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 my-2 hover:scale-105 ">Login
             </button>
@@ -119,6 +122,9 @@
                 {% if ProfileForm.errors.name %}
                 <div class="text-xs text-red-700">{{ ProfileForm.errors.name }}</div>
                 {% endif %}
+
+
+
                 <button type="submit"
                     class="text-white bg-gradient-to-r w-full to-primary-glow-green from-green-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-primary-glow-green dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 my-2 hover:scale-105 ">Register
                 </button>
