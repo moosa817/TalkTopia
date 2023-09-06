@@ -1,5 +1,5 @@
 from django import template
-from ..models import Room, Topic, Message
+from ..models import Room, Topic, Message, UserProfile
 from django.db.models import Count
 from django.contrib.auth.models import User
 
@@ -19,3 +19,12 @@ def get_info():
     room_count = Room.objects.all().count()
 
     return {"topics": topics, "top_topics": top_topics, "top_topics_name": top_topics_name, 'room_messages': room_messages, 'room_count': room_count}
+
+
+@register.simple_tag
+def pfp_info(username):
+    try:
+        user_profile = UserProfile.objects.get(username=username)
+        return user_profile
+    except UserProfile.DoesNotExist:
+        return {"pfp": "images/guest.webp"}

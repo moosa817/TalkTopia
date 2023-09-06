@@ -115,21 +115,23 @@ function removeFadeOut() {
 
 setInterval(removeFadeOut, 1000);
 
+//pasword
 
-//password
-const passwordToggle = document.querySelector('.js-password-toggle')
+$('.js-password-toggle').click(function (e) {
 
-passwordToggle.addEventListener('change', function () {
-    const password = document.querySelector('.js-password'),
-        passwordLabel = document.querySelector('.js-password-label')
 
-    if (password.type === 'password') {
-        password.type = 'text'
-        passwordLabel.innerHTML = 'hide'
+    let pwd = $(this).parent('div').find('input')
+
+    let passwordLabel = $(this).find('label')
+
+    if ($(pwd).attr('type') === 'password') {
+        $(pwd).attr('type', 'text')
+        passwordLabel.html('hide')
     } else {
-        password.type = 'password'
-        passwordLabel.innerHTML = 'show'
+        $(pwd).attr('type', 'password')
+        passwordLabel.html('show')
+
     }
 
-    password.focus()
+    pwd.focus()
 })

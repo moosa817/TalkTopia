@@ -12,7 +12,7 @@ from django.db.models import Count
 # Create your views here.
 
 
-def LoginPage(request):
+def LoginPage(request, backend='django.contrib.auth.backends.ModelBackend'):
     page = 'login'
     context = {'page': page}
     if request.user.is_authenticated:
@@ -34,7 +34,7 @@ def LoginPage(request):
 
         user = authenticate(request, username=username, password=password)
         if user is not None:
-            login(request, user)
+            login(request, user, backend=backend)
             return redirect('home')
         else:
             messages.error(request, 'Wrong Password')
@@ -42,7 +42,7 @@ def LoginPage(request):
     return render(request, 'base/register_login.html', context)
 
 
-def RegisterPage(request):
+def RegisterPage(request, backend='django.contrib.auth.backends.ModelBackend'):
     if request.user.is_authenticated:
         return redirect('home')
 
@@ -61,7 +61,7 @@ def RegisterPage(request):
                 email=request.POST.get('email').lower(),
             )
 
-            login(request, user)
+            login(request, user, backend=backend)
             return redirect('home')
 
     else:

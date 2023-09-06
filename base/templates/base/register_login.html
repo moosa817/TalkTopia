@@ -26,8 +26,7 @@
 
 
             <div class="relative w-full">
-                <div class="absolute inset-y-0 right-0 flex items-center px-2">
-                    <input class="hidden js-password-toggle" id="toggle" type="checkbox" />
+                <div class="js-password-toggle absolute inset-y-0 right-0 flex items-center px-2">
                     <label class=" rounded px-2 py-1 text-sm text-gray-600 font-mono cursor-pointer js-password-label"
                         for="toggle">
                         <svg class="w-5 eye-show" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -98,18 +97,61 @@
                 {% endif %}
 
 
-                <label for="pwd" class="block my-2 ml-1 text-sm font-medium text-gray-900 dark:text-white">Enter
-                    Password</label>
-                {% render_field UserForm.password1 class+="control-form" placeholder+="Enter Password" %}
+                <label for="password"
+                    class="block my-2 ml-1 text-sm font-medium text-gray-900 dark:text-white">Password</label>
+
+
+                <div class="relative w-full">
+                    <div class="js-password-toggle absolute inset-y-0 right-0 flex items-center px-2">
+                        <label
+                            class=" rounded px-2 py-1 text-sm text-gray-600 font-mono cursor-pointer js-password-label"
+                            for="toggle">
+                            <svg class="w-5 eye-show" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M15.0007 12C15.0007 13.6569 13.6576 15 12.0007 15C10.3439 15 9.00073 13.6569 9.00073 12C9.00073 10.3431 10.3439 9 12.0007 9C13.6576 9 15.0007 10.3431 15.0007 12Z"
+                                    stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                <path
+                                    d="M12.0012 5C7.52354 5 3.73326 7.94288 2.45898 12C3.73324 16.0571 7.52354 19 12.0012 19C16.4788 19 20.2691 16.0571 21.5434 12C20.2691 7.94291 16.4788 5 12.0012 5Z"
+                                    stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+
+                        </label>
+                    </div>
+                    <input class="appearance-none control-form font-mono js-password" id="password1" type="password"
+                        name="password1" placeholder="Enter Password" autocomplete="off" />
+                </div>
 
                 {% if UserForm.errors.password1 %}
                 <div class="text-xs text-red-700">{{ UserForm.errors.password1 }}</div>
                 {% endif %}
 
 
-                <label for="pwd2" class="block my-2 ml-1 text-sm font-medium text-gray-900 dark:text-white">Confirm
+                <label for="password" class="block my-2 ml-1 text-sm font-medium text-gray-900 dark:text-white">Confirm
                     Password</label>
-                {% render_field UserForm.password2 class+="control-form" placeholder+="Confirm Password" %}
+
+
+                <div class="relative w-full">
+                    <div class="js-password-toggle absolute inset-y-0 right-0 flex items-center px-2">
+                        <label
+                            class=" rounded px-2 py-1 text-sm text-gray-600 font-mono cursor-pointer js-password-label"
+                            for="toggle">
+                            <svg class="w-5 eye-show" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M15.0007 12C15.0007 13.6569 13.6576 15 12.0007 15C10.3439 15 9.00073 13.6569 9.00073 12C9.00073 10.3431 10.3439 9 12.0007 9C13.6576 9 15.0007 10.3431 15.0007 12Z"
+                                    stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                <path
+                                    d="M12.0012 5C7.52354 5 3.73326 7.94288 2.45898 12C3.73324 16.0571 7.52354 19 12.0012 19C16.4788 19 20.2691 16.0571 21.5434 12C20.2691 7.94291 16.4788 5 12.0012 5Z"
+                                    stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+
+                        </label>
+                    </div>
+                    <input class="appearance-none control-form font-mono js-password" id="password2" type="password"
+                        name="password2" placeholder="Enter Confirm Password" autocomplete="off" />
+                </div>
+
 
                 {% if UserForm.errors.password2 %}
                 <div class="text-xs text-red-700">{{ UserForm.errors.password2 }}</div>
@@ -118,10 +160,6 @@
 
 
 
-
-                {% if ProfileForm.errors.name %}
-                <div class="text-xs text-red-700">{{ ProfileForm.errors.name }}</div>
-                {% endif %}
 
 
 

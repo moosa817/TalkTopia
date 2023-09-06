@@ -1056,6 +1056,11 @@ input[type="range"]::-ms-fill-lower {
   margin-right: 0.75rem;
 }
 
+.mx-4 {
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+
 .mx-auto {
   margin-left: auto;
   margin-right: auto;
@@ -1091,11 +1096,6 @@ input[type="range"]::-ms-fill-lower {
   margin-bottom: 1.25rem;
 }
 
-.mx-4 {
-  margin-left: 1rem;
-  margin-right: 1rem;
-}
-
 .-mt-5 {
   margin-top: -1.25rem;
 }
@@ -1122,6 +1122,10 @@ input[type="range"]::-ms-fill-lower {
 
 .mb-4 {
   margin-bottom: 1rem;
+}
+
+.mb-5 {
+  margin-bottom: 1.25rem;
 }
 
 .ml-1 {
@@ -1719,6 +1723,11 @@ input[type="range"]::-ms-fill-lower {
 
 .stroke-slate-400 {
   stroke: #94a3b8;
+}
+
+.object-cover {
+  -o-object-fit: cover;
+     object-fit: cover;
 }
 
 .p-0 {

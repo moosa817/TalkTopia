@@ -14,6 +14,9 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 from dotenv import load_dotenv
 
+GUEST_USER_NAME_GENERATOR = 'guest_user.functions.generate_numbered_username'
+GUEST_USER_CONVERT_REDIRECT_URL = 'home'
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent

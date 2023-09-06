@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.http import HttpResponse, JsonResponse
 from django.db.models import Count
+from guest_user.functions import is_guest_user
 # Create your views here.
 
 
@@ -23,7 +24,9 @@ def createRoom(request):
             name = form.cleaned_data['name']
             description = form.cleaned_data['description']
             private = form.cleaned_data['private']
-            print(private, type(private))
+            if is_guest_user(request.user):
+                private = False
+
             # Separate handling for topic creation
             topic_name = request.POST.get('topic')
             topic, created = Topic.objects.get_or_create(name=topic_name)
@@ -51,6 +54,7 @@ def createRoom(request):
 
 @login_required(login_url='login')
 def updateRoom(request, pk):
+
     from_url = request.GET.get(
         'from') if request.GET.get('from') else 'home'
 
@@ -63,7 +67,12 @@ def updateRoom(request, pk):
     if request.method == 'POST':
         form = RoomForm(request.POST, instance=room)
         if form.is_valid():
+            form.save(commit=False)
+            if is_guest_user(request.user):
+                form.private = False
+
             form.save()
+
             if from_url == 'profile':
                 return redirect(from_url, pk=str(request.user))
             else:

@@ -44,7 +44,7 @@ def blur_email(email):
         return email
 
 
-def ForgotPwd(request):
+def ForgotPwd(request, backend='django.contrib.auth.backends.ModelBackend'):
     if request.session.get('code') and request.session.get('code_sucess'):
         type = 'changepwd'
         BlurEmail = None
@@ -121,7 +121,7 @@ def ForgotPwd(request):
                     print("password is valid")
                     user.set_password(pwd)
                     user.save()
-                    login(request, user)
+                    login(request, user, backend=backend)
                     return redirect('home')
 
     print(request.session.get('code'))

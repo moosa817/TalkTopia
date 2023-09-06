@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from ..models import Room
 from django.db.models import Q
 from django.db.models import Count
+from guest_user.decorators import allow_guest_user
+
 # Create your views here.
 
 

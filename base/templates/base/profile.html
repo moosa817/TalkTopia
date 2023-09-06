@@ -13,24 +13,26 @@
 
     <div class="md:col-span-7 col-span-12">
         <div class="flex justify-center mt-10">
-            <img class="w-32 h-32 rounded-full border border-primary-glow-green"
-                src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" alt="user photo">
+            <img class="w-32 h-32 rounded-full object-cover border border-primary-glow-green"
+                src="../uploads/{{user_info.pfp}}" alt="Pfp photo">
         </div>
-        <div class="text-center mt-2 text-xl font-semibold">Your Name</div>
+        <div class="text-center mt-2 text-xl font-semibold">{{user_info.name}}</div>
         <div class="text-center mt-1 text-sm text-primary-glow-green opacity-60">@{{request.user}}</div>
 
         {% if user.is_authenticated %}
         <div class="flex justify-center">
-            <button class=" relative inline-flex items-center justify-center mt-2 p-0.5 mb-2 mr-2 overflow-hidden text-sm
+            <a href="{%url 'account'%}">
+                <button class=" relative inline-flex items-center justify-center mt-2 p-0.5 mb-2 mr-2 overflow-hidden text-sm
         font-medium
         text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-primary-glow-green group-hover:from-green-200
         group-hover:to-blue-600 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-green-200
         dark:focus:ring-green-800">
-                <span
-                    class="relative px-4 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-primary-darktheme rounded-md group-hover:bg-opacity-0">
-                    Edit Profile
-                </span>
-            </button>
+                    <span
+                        class="relative px-4 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-primary-darktheme rounded-md group-hover:bg-opacity-0">
+                        Edit Profile
+                    </span>
+                </button>
+            </a>
         </div>
         {%endif%}
 

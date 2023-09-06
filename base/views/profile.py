@@ -14,6 +14,7 @@ from django.db.models import Count
 from django.contrib.auth import update_session_auth_hash
 from django.urls import reverse
 # Create your views here.
+from guest_user.decorators import regular_user_required
 
 
 def Profile(request, pk):
@@ -33,7 +34,7 @@ def JoinedRooms(request):
     return render(request, 'base/joined_rooms.html', context)
 
 
-@login_required(login_url='login')
+@regular_user_required
 def AccountSettings(request):
 
     def get_initials():
@@ -41,7 +42,6 @@ def AccountSettings(request):
         profile_dict = dict(profile.values()[0])
 
         profile_dict.pop('id')
-        profile_dict.pop('guest')
         return profile_dict
 
     ProfileForm = ProfileEditform(initial=get_initials())
