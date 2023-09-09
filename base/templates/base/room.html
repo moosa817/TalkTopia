@@ -2,14 +2,11 @@
 
 
 {%block content %}
-{% load compress %}
 {% load static %}
 {% load tz %}
 
 
-{%compress js%}
 <script src="{% static 'js/chat.js' %}" defer></script>
-{%endcompress%}
 
 <style>
     .room-container {

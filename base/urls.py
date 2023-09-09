@@ -21,5 +21,5 @@ urlpatterns = [
     path('forgot', forgot_pwd.ForgotPwd, name='forgot'),
     path("convert/", convert.custom_convert_form, name='guest_user_convert'),
     path('guest', guestest.welcome_user, name='guest_user_convert_success'),
-
+    path('confirm_logout', guestest.ConfirmLogout, name="confirm-logout")
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

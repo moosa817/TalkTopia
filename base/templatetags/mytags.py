@@ -27,4 +27,4 @@ def pfp_info(username):
         user_profile = UserProfile.objects.get(username=username)
         return user_profile
     except UserProfile.DoesNotExist:
-        return {"pfp": "images/guest.webp"}
+        return {"pfp": {'url': "/static/img/guest.webp"}}

@@ -14,7 +14,7 @@ import string
 from django.contrib.auth import password_validation
 from django.forms import ValidationError
 from email.mime.text import MIMEText
-import config
+from django.conf import settings
 # Create your views here.
 import smtplib
 
@@ -23,11 +23,11 @@ def send_email(to, subject, body):
     msg = MIMEText(body)
     msg['Subject'] = subject
     msg['To'] = to
-    msg['From'] = config.email_sender
+    msg['From'] = settings.EMAIL_SENDER
 
-    s = smtplib.SMTP(config.mail_server, config.mail_port)
+    s = smtplib.SMTP(settings.MAIL_SERVER, settings.MAIL_PORT)
     s.starttls()
-    s.login(config.mail_user, config.mail_passwd)
+    s.login(settings.MAIL_USER, settings.MAIL_PWD)
     s.send_message(msg)
     s.quit()
 

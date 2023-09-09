@@ -112,3 +112,33 @@
         </div>
     </div>
 </div>
+
+
+<!-- singup / guest modal -->
+<!-- Default Modal -->
+<div id="signup-modal" tabindex="-1"
+    class="blur-modal fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div class="relative w-full max-w-lg max-h-full">
+        <!-- Modal content -->
+        <div class="relative text-white bg-white rounded-lg shadow dark:bg-gray-700">
+            <!-- Modal body -->
+            <div>&nbsp;</div>
+            <div class="mx-10 my-5">
+                <a href="{%url 'register'%}">
+                    <button class="block w-full p-5 bg-green-400 text-xl font-semibold">Signup/Login with Email</button>
+                </a>
+
+                <a href="/guest">
+                    <button class="my-4  block w-full p-5 bg-gray-800">
+                        <p class="text-xl font-semibold">Sign in as Guest</p>
+                        <p class="text-xs font-extralight">nothing required</p>
+                    </button>
+                </a>
+            </div>
+            <a data-modal-hide="signup-modal" class="dark:text-gray-400 text-gray-800 modal-close" href="#">
+                <div class="opacity-90 text-center text-xs font-extrabold">maybe later</div>
+            </a>
+            <div>&nbsp;</div>
+        </div>
+    </div>
+</div>

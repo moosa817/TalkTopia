@@ -19,7 +19,13 @@ from guest_user.decorators import regular_user_required
 
 def Profile(request, pk):
     user = User.objects.get(username=pk)
-    rooms = Room.objects.filter(host=user)
+
+    order_by = '-updated' if request.GET.get(
+        'filter') == 'recent' else 'participants'
+
+    rooms = Room.objects.filter().order_by(order_by)
+
+    rooms = rooms.filter(host=user)
 
     context = {'user': user, 'rooms': rooms}
     return render(request, 'base/profile.html', context)
@@ -30,6 +36,12 @@ def JoinedRooms(request):
     user_id = request.user.id
 
     rooms = Room.objects.filter(participants=user_id)
+
+    order_by = '-updated' if request.GET.get(
+        'filter') == 'recent' else 'participants'
+
+    rooms = rooms.filter().order_by(order_by)
+
     context = {'rooms': rooms}
     return render(request, 'base/joined_rooms.html', context)
 
@@ -40,8 +52,11 @@ def AccountSettings(request):
     def get_initials():
         profile = UserProfile.objects.filter(username=request.user)
         profile_dict = dict(profile.values()[0])
-
         profile_dict.pop('id')
+
+        if profile_dict['pfp'] == '/images/guest.webp':
+            profile_dict['pfp'] = '/static/img/guest.webp'
+
         return profile_dict
 
     ProfileForm = ProfileEditform(initial=get_initials())
@@ -89,6 +104,9 @@ def AccountSettings(request):
                     print("wrong password mf")
                     userForm.add_error(
                         'old_password', 'Old password is incorrect.')
+                    context = {'ProfileForm': ProfileForm,
+                               "userForm": userForm}
+                    return render(request, 'base/account_settings.html', context)
 
             userForm.save()
             # Redirect to the user's profile page after editing

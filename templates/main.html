@@ -1,4 +1,3 @@
-{% load compress %}
 {% load static %}
 {%load mytags %}
 {% get_info as info %}
@@ -26,10 +25,8 @@
         crossorigin='anonymous' referrerpolicy='no-referrer'></script>
 
 
-    {% compress css %}
     <link rel="stylesheet" href="{% static 'css/dist/output.css' %}">
     <link rel="stylesheet" href="{%static 'css/dist/style.css'%}">
-    {% endcompress %}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
         integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -51,9 +48,7 @@
 
 
 
-    {%compress js%}
     <script src="{% static 'js/style.js' %}"></script>
-    {%endcompress%}
 </body>
 
 </html>

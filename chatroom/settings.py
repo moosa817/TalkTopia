@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 from dotenv import load_dotenv
+from os import getenv
 
 GUEST_USER_NAME_GENERATOR = 'guest_user.functions.generate_numbered_username'
 GUEST_USER_CONVERT_REDIRECT_URL = 'home'
@@ -47,7 +48,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'base.apps.BaseConfig',
-    'compressor',
     'widget_tweaks',
     'guest_user'
 ]
@@ -163,17 +163,34 @@ STATICFILES_DIRS = [
 ]
 
 
-COMPRESS_ROOT = BASE_DIR / 'static'
-
-COMPRESS_ENABLED = True
-
 STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    'compressor.finders.CompressorFinder',  # Make sure this is included
 ]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# aws s3bucket config
+
+AWS_ACCESS_KEY_ID = getenv("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = getenv("AWS_SECRET_ACCESS_KEY")
+AWS_STORAGE_BUCKET_NAME = getenv("AWS_STORAGE_BUCKET_NAME")
+AWS_S3_SIGNATURE_NAME = 's3v4',
+AWS_S3_REGION_NAME = 'us-east-1'
+AWS_S3_FILE_OVERWRITE = False
+AWS_DEFAULT_ACL = None
+AWS_S3_VERITY = True
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+# CUSTOM SECRETS
+
+EMAIL_SENDER = getenv("EMAIL_SENDER")
+MAIL_PWD = getenv("SMTP_PWD")
+MAIL_EMAIL_RECIVER = getenv("EMAIL_RECIEVER")
+MAIL_SERVER = getenv("MAIL_SERVER")
+MAIL_PORT = 587
+MAIL_USER = getenv("MAIL_USER")

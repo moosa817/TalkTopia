@@ -40,10 +40,15 @@ def createRoom(request):
             )
 
             room.participants.add(request.user)
+
             if from_url == 'profile':
-                return redirect(from_url, pk=str(request.user))
+                response = redirect(from_url, pk=str(request.user))
+                response['Location'] += '?filter=recent'
+                return response
             else:
-                return redirect(from_url)
+                response = redirect(from_url)
+                response['Location'] += '?filter=recent'
+                return response
     else:
         form = RoomForm()
 
@@ -74,9 +79,14 @@ def updateRoom(request, pk):
             form.save()
 
             if from_url == 'profile':
-                return redirect(from_url, pk=str(request.user))
+                response = redirect(from_url, pk=str(request.user))
+                response['Location'] += '?filter=recent'
+                return response
+
             else:
-                return redirect(from_url)
+                response = redirect(from_url)
+                response['Location'] += '?filter=recent'
+                return response
     else:
         # coudnt get current_topic value for html simply(was instead getting id)
 
