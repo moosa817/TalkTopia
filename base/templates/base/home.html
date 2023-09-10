@@ -131,7 +131,7 @@
                             {{room.updated | timesince}} ago
                         </div>
                     </div>
-                    <a href="{%url 'room' room.id %}">
+                    <a href="{%url 'room' room.slug %}">
                         <h5 class="my-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">{{room.name}}
                         </h5>
                     </a>
@@ -153,7 +153,7 @@
                     <div class="flex justify-end mt-3">
 
                         {% if room.private %}
-                        <span title="Locked" class="locked ml-5 bg-gray-800 rounded-full py-2 px-3"><i
+                        <span title="Locked" class="locked ml-5 bg-gray-300 dark:bg-gray-800 rounded-full py-2 px-3"><i
                                 class="fa-solid fa-lock"></i></span>
                         {%endif%}
                         {% if request.user == room.host %}

@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 # Create your models here.
+from django.utils.text import slugify
 
 
 class UserProfile(models.Model):
@@ -33,6 +34,13 @@ class Room(models.Model):
 
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
+    slug = models.SlugField(unique=True, blank=True)  # Add a SlugField
+
+    def save(self, *args, **kwargs):
+        # Generate and set the slug based on the name field
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super(Room, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.name
@@ -46,4 +54,4 @@ class Message(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.body[0:50]
+        return str(self.body)[0:50]

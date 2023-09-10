@@ -1,38 +1,60 @@
 {% extends 'main.html' %}
 
 
+
 {%block content %}
 {% load static %}
+<link rel="stylesheet" href="{%static 'css/dist/emojionearea.min.css' %}">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/emojionearea/3.4.2/emojionearea.min.js"
+    integrity="sha512-hkvXFLlESjeYENO4CNi69z3A1puvONQV5Uh+G4TUDayZxSLyic5Kba9hhuiNLbHqdnKNMk2PxXKm0v7KDnWkYA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 {% load tz %}
 
 
 <script src="{% static 'js/chat.js' %}" defer></script>
 
-<style>
-    .room-container {
-        display: grid;
-        grid-template-columns: 3fr 1fr;
-    }
-
-</style>
 <span id="room-id" data-room-id="{{room.id}}" data-user="{{request.user}}"></span>
 
+<div class="fixed w-full">
+    <div class="flex justify-between bg-gray-300 dark:bg-gray-900">
+        <div>
+            <h1 class="text-xl p-4 font-semibold">{{room.name}}</h1>
+        </div>
+        <div class="md:hidden block">
+            <button id="toggle-participants-mobile">
+                <div><i class="fa fa-users m-4 text-xl mt-6"></i></div>
+            </button>
 
 
-<h1>{{room.name}}</h1>
-<hr>
-<div class="room-container">
-    <div>
+        </div>
+
+        <div class="hidden md:block">
+            <button id="toggle-participants">
+                <div><i class="fa fa-users m-4 text-xl mt-6"></i></div>
+            </button>
+        </div>
+
+    </div>
+</div>
+</div>
+
+<div class=" flex ">
+    <div id="msg-container" class=" my-20 duration-700 md:w-[80vw] w-[100vw]">
         <h2>Messages</h2>
+
+        <input type="text" id="rf" class="opacity-0 w-0 h-0">
+
         <hr>
-        <div id="chat-messages">
+        <div id="chat-messages" class="md:mx-10 mx-5">
             {%for message in room_messages %}
-            <div>
+            <div class="w-full">
                 <small> <a href="{% url 'profile' message.user %}">@{{message.user}}</a>,
                     <span data-time="{{ message.updated|date:'Y-m-d\TH:i:s\Z' }}" class="time-updated">
                     </span>
                 </small>
-                <p>
+                <p style="word-wrap:break-word">
                     {{message.body}}
                 </p>
                 {%if message.user == request.user %}
@@ -45,25 +67,56 @@
             {%endfor%}
         </div>
     </div>
+
     <div>
-        <h2>Participants</h2>
-        <hr>
-        {%for user in room.participants.all %}
-        <div>
-            {{user.username}}
-            <hr>
+        <div id="participants"
+            class="z-10 mt-[60px] md:w-[16vw] w-[30vw] md:block hidden fixed right-0 dark:bg-gray-800 bg-gray-200 h-full">
+            <h2 class="md:text-xl text-xs text-center font-semibold p-4">Participants<span
+                    class="opacity-70 text-xs">-100</span>
+
+            </h2>
+            <hr class="h-px bg-gray-100 border-0 dark:bg-gray-700">
+
+            {%for user in room.participants.all %}
+            <div class="py-2 mx-1 text-center font-extralight text-sm opacity-80">
+                <a href="{%url 'profile' user.username %}">
+                    {{user.username}}
+                </a>
+            </div>
+            <hr class="h-px bg-gray-100 border-0 dark:bg-gray-700">
+            {%endfor%}
         </div>
-        {%endfor%}
     </div>
 </div>
 
 {% if request.user.is_authenticated %}
-<div class="comment-form">
-    <form action="" method="post" id="chat-form">
+<form action="" method="post" id="chat-form" class=" ">
+    <div id="chat-div"
+        class="comment-form dark:bg-primary-darker bg-gray-200 p-2 pb-3 flex items-center fixed bottom-0 shadow-lg w-full md:w-[85%]">
+
+
         {%csrf_token%}
-        <input id="chat-input" type="text" name="message" placeholder="Enter Your Message">
-    </form>
+        <input autocomplete="off" id="chat-input"
+            class="bg-gray-50 border w-[95%] border-gray-300 text-gray-900 text-sm rounded-lg block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 emojionearea"
+            type="text" name="message" placeholder="Type Message">
+
+
+        <button id="send-msg-btn" type="submit" class="w-[5%] md:mr-2 mr-4">
+            <div>
+                <svg class="ml-2 w-5 h-5 dark:fill-white fill-black opacity-80" viewBox="0 0 32 32" version="1.1"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <title>send message</title>
+                    <path
+                        d="M31.083 16.589c0.105-0.167 0.167-0.371 0.167-0.589s-0.062-0.421-0.17-0.593l0.003 0.005c-0.030-0.051-0.059-0.094-0.091-0.135l0.002 0.003c-0.1-0.137-0.223-0.251-0.366-0.336l-0.006-0.003c-0.025-0.015-0.037-0.045-0.064-0.058l-28-14c-0.163-0.083-0.355-0.132-0.558-0.132-0.691 0-1.25 0.56-1.25 1.25 0 0.178 0.037 0.347 0.104 0.5l-0.003-0.008 5.789 13.508-5.789 13.508c-0.064 0.145-0.101 0.314-0.101 0.492 0 0.69 0.56 1.25 1.25 1.25 0 0 0 0 0.001 0h-0c0.001 0 0.002 0 0.003 0 0.203 0 0.394-0.049 0.563-0.136l-0.007 0.003 28-13.999c0.027-0.013 0.038-0.043 0.064-0.058 0.148-0.088 0.272-0.202 0.369-0.336l0.002-0.004c0.030-0.038 0.060-0.082 0.086-0.127l0.003-0.006zM4.493 4.645l20.212 10.105h-15.88zM8.825 17.25h15.88l-20.212 10.105z">
+                    </path>
+                </svg>
+            </div>
+        </button>
+    </div>
+</form>
 </div>
+{%else%}
+login to chat
 {%endif%}
 
 

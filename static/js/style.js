@@ -136,7 +136,7 @@ $('.js-password-toggle').click(function (e) {
     pwd.focus()
 })
 
-
+//on page load 
 if (!$('#current_user').data('user')) {
     // Function to show the modal
     function showModal() {
@@ -151,3 +151,5 @@ if (!$('#current_user').data('user')) {
     // Set an interval to show the modal every 5 minutes (300,000 milliseconds)
     setInterval(showModal, 300000);
 }
+
+

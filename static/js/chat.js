@@ -84,7 +84,6 @@ const chatSocket = new WebSocket(url);
 
 chatSocket.onopen = function (e) {
     console.log('Connected to chat socket')
-    console.log(e)
 }
 
 chatSocket.onmessage = function (e) {
@@ -97,24 +96,37 @@ chatSocket.onmessage = function (e) {
 }
 
 
+$('#chat-form').keydown(function (e) {
+
+    if (e.keyCode == 13) {
+        let btn = document.getElementById('send-msg-btn')
+
+        btn.click()
+        window.scrollTo(0, document.body.scrollHeight);
+
+    }
+});
+
 
 $('#chat-form').submit(function (e) {
     e.preventDefault();
+
+    // reason without focusing outside message, message is null 
+    let r = document.getElementById('rf')
+    r.focus()
     updateTimestamps();
-
     let message = $('#chat-input').val();
-    this.reset()
 
+    $('.emojionearea-editor').focus()
+
+
+    this.reset()
+    $('.emojionearea-editor').text('')
     chatSocket.send(JSON.stringify({
         'message': message,
         'user': USER,
     }))
-
-
-
 });
-
-
 
 function AddMessage(user, message) {
     html = `    <div>
@@ -142,3 +154,47 @@ function AddMessage(user, message) {
 
 // Update timestamps every 10 seconds (adjust the interval as needed)
 setInterval(updateTimestamps, 10000); // 10000 ms = 10 seconds
+
+//style for chat 
+//toggle participants 
+$('#toggle-participants').click(function () {
+    $('#participants').toggle();
+    if ($('#msg-container').hasClass('w-[80vw]') || $('#msg-container').hasClass('md:w-[80vw]')) {
+        $('#msg-container').removeClass('md:w-[80vw]');
+        $('#msg-container').addClass('w-[100vw]');
+    }
+    else {
+        $('#msg-container').removeClass('w-[100vw]');
+        $('#msg-container').addClass('md:w-[80vw]');
+
+    }
+    if ($('#chat-div').hasClass('md:w-[85%]')) {
+
+        $('#chat-div').removeClass('md:w-[85%]');
+
+
+    } else {
+        $('#chat-div').addClass('md:w-[85%]');
+
+    }
+
+
+})
+
+
+$('#toggle-participants-mobile').click(function () {
+    $('#participants').toggle();
+})
+
+
+
+
+$('nav').remove()
+$('#nav-mb').remove()
+
+// $("#chat-input").emojioneArea();
+
+
+$(".emojionearea").emojioneArea({
+    searchPlaceholder: "Search",
+});

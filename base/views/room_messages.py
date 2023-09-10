@@ -10,12 +10,21 @@ from django.contrib.auth.forms import UserCreationForm
 from django.http import HttpResponse, JsonResponse
 from django.db.models import Count
 # Create your views here.
+from django.http import HttpResponseNotFound
 
 
 def room(request, pk):
-    room = Room.objects.get(id=pk)
+
+    try:
+        room = Room.objects.get(slug=pk)
+    except Exception as e:
+        return HttpResponseNotFound(e)
+
     room_messages = room.message_set.all()
     participants = room.participants.filter()
+
+    if request.user not in participants and room.private:
+        return redirect('home')
 
     context = {'room': room, 'room_messages': room_messages,
                'participants': participants}
