@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 # Create your models here.
 from django.utils.text import slugify
+import random
+import string
 
 
 class UserProfile(models.Model):
@@ -31,6 +33,9 @@ class Room(models.Model):
         User, related_name='participants', blank=True)
     description = models.TextField(blank=True, null=True)
     private = models.BooleanField(default=False)
+
+    invite_code = models.CharField(default=''.join(
+        random.choice(string.ascii_letters + string.digits) for _ in range(6)), max_length=6)
 
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)

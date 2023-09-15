@@ -113,3 +113,38 @@ def deleteRoom(request):
         room = Room.objects.get(id=pk)
         room.delete()
         return JsonResponse({'success': True})
+
+
+@login_required
+def LeaveRoom(request):
+    room_id = request.GET.get('id')
+    if room_id:
+        try:
+            room = Room.objects.get(id=room_id)
+            url = 'room/' + room.slug
+
+            if request.user in room.participants.all():
+                room.participants.remove(request.user)
+                return redirect(url)
+            else:
+                return redirect(url)
+
+        except Exception as e:
+            return HttpResponse('you not in ')
+
+    else:
+        return redirect('home')
+
+
+def JoinRoom(request):
+    room_id = request.GET.get('id')
+    if room_id:
+        try:
+            room = Room.objects.get(id=room_id)
+
+            if request.user not in room.participants.all() and room.private == False:
+                room.participants.add(request.user)
+            return JsonResponse({'success': True})
+        except Exception as e:
+            print(e)
+            return redirect('home')

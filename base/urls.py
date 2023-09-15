@@ -1,6 +1,6 @@
 from django.urls import path, include
 # views folder
-from .views import home, profile, room_messages, register_login, profile, rooms, forgot_pwd, guestest, convert
+from .views import home, profile, room_messages, register_login, profile, rooms, forgot_pwd, guestest, convert, join_leave_room
 from django.conf.urls.static import static
 from django.conf import settings
 
@@ -21,5 +21,8 @@ urlpatterns = [
     path('forgot', forgot_pwd.ForgotPwd, name='forgot'),
     path("convert/", convert.custom_convert_form, name='guest_user_convert'),
     path('guest', guestest.welcome_user, name='guest_user_convert_success'),
-    path('confirm_logout', guestest.ConfirmLogout, name="confirm-logout")
+    path('confirm_logout', guestest.ConfirmLogout, name="confirm-logout"),
+    path('leave_room', rooms.LeaveRoom, name="leave-room"),
+    path('join_room', rooms.JoinRoom, name="join-room")
+
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

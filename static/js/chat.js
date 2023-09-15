@@ -159,6 +159,8 @@ setInterval(updateTimestamps, 10000); // 10000 ms = 10 seconds
 //toggle participants 
 $('#toggle-participants').click(function () {
     $('#participants').toggle();
+
+
     if ($('#msg-container').hasClass('w-[80vw]') || $('#msg-container').hasClass('md:w-[80vw]')) {
         $('#msg-container').removeClass('md:w-[80vw]');
         $('#msg-container').addClass('w-[100vw]');
@@ -188,13 +190,63 @@ $('#toggle-participants-mobile').click(function () {
 
 
 
-
-$('nav').remove()
-$('#nav-mb').remove()
-
-// $("#chat-input").emojioneArea();
-
-
 $(".emojionearea").emojioneArea({
     searchPlaceholder: "Search",
 });
+
+
+
+$('#leave').click(function () {
+    $('#room-name-leave').text($('#current_room').text())
+
+    // $(this).hide()
+    // $('#join').show()
+})
+
+
+$('#join').click(function () {
+    $.ajax({
+        type: "GET",
+        url: `/join_room?id=${room_id}`,
+        dataType: "",
+        success: function (response) {
+            console.log(response)
+            if (response.success) {
+                $('#join').hide()
+                $('#leave').removeClass('hidden');
+                $('#leave').addClass('inline-flex');
+
+                $('#participants-members').prepend(`<div class="py-2 mx-1 text-center font-extralight text-sm opacity-80">
+                            <a href="/profile/${USER}">
+                                ${USER}
+                            </a>
+                        </div>
+                        <hr class="h-px bg-gray-100 border-0 dark:bg-gray-700">`
+                );
+            }
+        }
+    });
+
+})
+let invite_link = `${window.location.origin}/invite/${$('#CopyDropDownBtn').data('link')}`
+$('#input-group-search').val(invite_link)
+
+
+function CopywithJquery(element_id) {
+    var temp = $("<input>");
+    $("body").append(temp);
+    temp.val($(element_id).val()).select();
+    document.execCommand("copy");
+    temp.remove();
+}
+
+
+$('#copy-invite-link').click(function () {
+    $(this).text("Copied")
+
+    CopywithJquery('#input-group-search')
+    $('#input-group-search').select()
+})
+
+
+window.scrollTo(0, document.body.scrollHeight);

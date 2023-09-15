@@ -52,6 +52,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         user1 = await sync_to_async(User.objects.get)(username=user)
         await sync_to_async(room.participants.add)(user1)
 
+        print("creating ", message)
         await sync_to_async(Message.objects.create)(
             room=room,
             user=user1,

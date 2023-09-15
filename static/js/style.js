@@ -33,16 +33,20 @@ $('#theme-btn').click(function (e) {
 
 
 
+$(window).on("load", function (e) {
 
 
+    $('.modal-btn').click(function () {
+        $('#content').addClass('blurPage');
+        console.log("here")
+    });
 
-$('.modal-btn').click(function () {
-    $('#content').addClass('blurPage');
+    $('.modal-close').click(function () {
+        $('#content').removeClass('blurPage');
+    })
+
 });
 
-$('.modal-close').click(function () {
-    $('#content').removeClass('blurPage');
-})
 
 
 const modals = $('.blur-modal')
@@ -140,8 +144,7 @@ $('.js-password-toggle').click(function (e) {
 if (!$('#current_user').data('user')) {
     // Function to show the modal
     function showModal() {
-        var modal = document.getElementById("show-signup-modal");
-        modal.click()
+        $('#show-signup-modal').click()
     }
 
 
