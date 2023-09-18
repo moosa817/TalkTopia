@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect
 from ..models import Room, Topic, Message
-from ..forms import RoomForm, MessageForm
 from django.db.models import Q
 from django.contrib.auth.models import User
 from django.contrib import messages
@@ -33,28 +32,36 @@ def room(request, pk):
 
 
 @login_required(login_url='login')
-def deleteMessage(request, pk):
-    message = Message.objects.get(id=pk)
-    if request.user != message.user:
-        return HttpResponse('You are not allowed here')
+def deleteMessage(request):
     if request.method == 'POST':
-        message.delete()
-        return redirect('room', pk=message.room.id)
-    return render(request, 'base/delete.html', {'obj': message})
+        pk = request.POST.get('pk')
+        if pk:
+            message = Message.objects.get(id=pk)
+            if request.user != message.user:
+                return JsonResponse({'success': False})
+            else:
+                message.delete()
+                return JsonResponse({'success': True})
+        else:
+            return JsonResponse({'success': False})
+    return JsonResponse({'success': False})
 
 
 @login_required(login_url='login')
-def EditMessage(request, pk):
-    msg = Message.objects.get(id=pk)
-    msg_form = MessageForm(instance=msg)
+def EditMessage(request):
 
-    if request.user != msg.user:
-        return HttpResponse('You are not allowed here')
     if request.method == 'POST':
-        form = MessageForm(request.POST, instance=msg)
-        if form.is_valid():
-            form.save()
-            return redirect('room', pk=msg.room.id)
+        msg_id = request.POST.get('msg_id')
+        new_msg = request.POST.get('new_msg')
 
-    context = {'msg': msg, 'form': msg_form}
-    return render(request, 'base/edit_msg.html', context)
+        if msg_id and new_msg:
+            msg = Message.objects.get(id=msg_id)
+
+            if request.user != msg.user:
+                return JsonResponse({'success': False})
+            else:
+                msg.body = new_msg
+                msg.save()
+                return JsonResponse({'success': True})
+
+    return JsonResponse({'success': False})

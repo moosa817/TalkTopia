@@ -248,5 +248,79 @@ $('#copy-invite-link').click(function () {
     $('#input-group-search').select()
 })
 
+//delete Msg 
+
+let message_id;
+$('.delete-msg').click(function (e) {
+    message_id = $(this).data('message-id')
+    let a = $(`#${message_id} p`)
+    $('#msg-txt-modal').text(a.text())
+})
+
+$('#delete-btn-confirm').click(function (e) {
+    $(`#${message_id}`).fadeOut();
+    // console.log(message_id)
+    $.ajax({
+        data: {
+            pk: message_id,
+            csrfmiddlewaretoken: window.CSRF_TOKEN
+        },
+        type: 'POST',
+        url: '/delete-msg'
+    })
+        .done(function (response) {
+        })
+})
+
+let message_id_edit;
+let classes = "dark:bg-gray-800 bg-gray-200 border rounded"
+
+$('.edit-msg').click(function (e) {
+    message_id_edit = $(this).data('message-id')
+
+    $(`#${message_id_edit} p`).attr('contenteditable', 'true')
+    $(`#${message_id_edit} p`).addClass(classes);
+    $(`#${message_id_edit} p`).focus();
+    $(`#${message_id_edit} .edit-done`).show()
+    $(this).hide()
+
+
+})
+$('.edit-done').click(function (e) {
+
+    message_id_edit = $(this).data('message-id')
+    $(`#${message_id_edit} p`).attr('contenteditable', 'false')
+    $(`#${message_id_edit} p`).removeClass(classes);
+    $(`#${message_id_edit} .edit-msg`).show()
+    $(`#${message_id_edit} .edit-done`).hide()
+
+    let msg_id = message_id_edit
+    let new_msg = $(`#${message_id_edit} p`).text().trim()
+
+
+    $.ajax({
+        data: {
+            msg_id: msg_id,
+            new_msg: new_msg,
+            csrfmiddlewaretoken: window.CSRF_TOKEN
+        },
+        type: 'POST',
+        url: '/edit-msg'
+    })
+        .done(function (response) {
+        })
+})
+
+
+$('.msg-paragraph').keypress(function (e) {
+    if (e.keyCode === 13) {
+        $('.edit-done').click()
+    }
+})
+$(".msg-paragraph").keypress(function (e) {
+    return e.which != 13;
+});
+
 
 window.scrollTo(0, document.body.scrollHeight);
+

@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from ..models import Room, Topic, Message, UserProfile
-from ..forms import RoomForm, MessageForm, ProfileCreationForm
+from ..forms import RoomForm, ProfileCreationForm
 from django.db.models import Q
 from django.contrib.auth.models import User
 from django.contrib import messages

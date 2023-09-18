@@ -13,8 +13,8 @@ urlpatterns = [
     path('login/', register_login.LoginPage, name='login'),
     path('logout/', register_login.LogoutPage, name='logout'),
     path('register/', register_login.RegisterPage, name='register'),
-    path('delete-msg/<str:pk>', room_messages.deleteMessage, name='delete-msg'),
-    path('edit-msg/<str:pk>', room_messages.EditMessage, name='edit-msg'),
+    path('delete-msg', room_messages.deleteMessage, name='delete-msg'),
+    path('edit-msg', room_messages.EditMessage, name='edit-msg'),
     path('profile/<str:pk>', profile.Profile, name='profile'),
     path('joined-rooms', profile.JoinedRooms, name='joined-rooms'),
     path('account', profile.AccountSettings, name='account'),
@@ -23,6 +23,10 @@ urlpatterns = [
     path('guest', guestest.welcome_user, name='guest_user_convert_success'),
     path('confirm_logout', guestest.ConfirmLogout, name="confirm-logout"),
     path('leave_room', rooms.LeaveRoom, name="leave-room"),
-    path('join_room', rooms.JoinRoom, name="join-room")
+    path('join_room', rooms.JoinRoom, name="join-room"),
+    path('invite/<str:code>', rooms.Invite, name='invite'),
+    path('invite', rooms.InvitePage, name='invite-room'),
+    path('join/<str:code>', rooms.InviteJoin, name='join')
+
 
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

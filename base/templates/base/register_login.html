@@ -61,6 +61,11 @@
             {% endfor %}
             {% endif %}
 
+
+            <div class="text-center mb-10 text-sm opacity-90">
+                <a href="{% url 'guest_user_convert_success' %}" class="font-semibold text-blue-400">Sign in as guest
+                    instead</a>
+            </div>
         </form>
 
     </div>
@@ -168,6 +173,11 @@
                 </button>
                 <div class="text-center mb-10 text-sm opacity-90">
                     Have an Account?<a href="{% url 'login' %}" class="font-semibold text-blue-400"> Login</a>
+                </div>
+
+                <div class="text-center mb-10 text-sm opacity-90">
+                    <a href="{% url 'guest_user_convert_success' %}" class="font-semibold text-blue-400">Sign in as
+                        guest instead</a>
                 </div>
             </form>
 

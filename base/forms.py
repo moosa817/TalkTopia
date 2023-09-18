@@ -36,12 +36,6 @@ class RoomForm(ModelForm):
         return topic
 
 
-class MessageForm(ModelForm):
-    class Meta:
-        model = Message
-        fields = ('body',)
-
-
 class ProfileCreationForm(ModelForm):
     class Meta:
         model = UserProfile

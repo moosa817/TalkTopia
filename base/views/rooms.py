@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from ..models import Room, Topic, Message
-from ..forms import RoomForm, MessageForm
+from ..forms import RoomForm
 from django.db.models import Q
 from django.contrib.auth.models import User
 from django.contrib import messages
@@ -115,7 +115,7 @@ def deleteRoom(request):
         return JsonResponse({'success': True})
 
 
-@login_required
+@login_required(login_url='login')
 def LeaveRoom(request):
     room_id = request.GET.get('id')
     if room_id:
@@ -136,6 +136,7 @@ def LeaveRoom(request):
         return redirect('home')
 
 
+@login_required(login_url='login')
 def JoinRoom(request):
     room_id = request.GET.get('id')
     if room_id:
@@ -148,3 +149,38 @@ def JoinRoom(request):
         except Exception as e:
             print(e)
             return redirect('home')
+
+
+def Invite(request, code):
+    try:
+        room = Room.objects.get(Q(invite_code=code) | Q(slug=code))
+        if room.private:
+            room = None if room.invite_code != code else room
+    except Exception as e:
+        room = None
+
+    context = {'room': room}
+    return render(request, 'base/invite.html', context)
+
+
+@login_required(login_url='login')
+def InviteJoin(request, code):
+    try:
+        room = Room.objects.get(Q(invite_code=code) | Q(slug=code))
+        if room.private:
+            if code == room.invite_code:
+                room.participants.add(request.user)
+                return redirect('room', room.slug)
+            else:
+                return redirect('home')
+        else:
+            # room is not private
+            room.participants.add(request.user)
+            return redirect('room', room.slug)
+
+    except Exception as e:
+        return redirect('home')
+
+
+def InvitePage(request):
+    return render(request, 'base/invite_page.html', {})

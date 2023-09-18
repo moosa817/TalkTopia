@@ -34,18 +34,31 @@ class Room(models.Model):
     description = models.TextField(blank=True, null=True)
     private = models.BooleanField(default=False)
 
-    invite_code = models.CharField(default=''.join(
-        random.choice(string.ascii_letters + string.digits) for _ in range(6)), max_length=6)
+    invite_code = models.CharField(unique=True, max_length=6)
 
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
     slug = models.SlugField(unique=True, blank=True)  # Add a SlugField
 
     def save(self, *args, **kwargs):
+        # Generate a unique invite code
+        if not self.invite_code:
+            unique_code = self.generate_unique_invite_code()
+            self.invite_code = unique_code
+
         # Generate and set the slug based on the name field
         if not self.slug:
             self.slug = slugify(self.name)
+
         super(Room, self).save(*args, **kwargs)
+
+    def generate_unique_invite_code(self):
+        # Generate a unique invite code
+        while True:
+            invite_code = ''.join(random.choice(
+                string.ascii_letters + string.digits) for _ in range(6))
+            if not Room.objects.filter(invite_code=invite_code).exists():
+                return invite_code
 
     def __str__(self):
         return self.name
