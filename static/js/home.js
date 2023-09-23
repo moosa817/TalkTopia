@@ -162,7 +162,6 @@ if (!currentUrl.searchParams.get("filter")) {
     recent.attr('href', currentUrl)
 
 } else {
-    console.log("here")
     currentUrl.searchParams.set("filter", "popular")
     popular.attr('href', currentUrl)
 

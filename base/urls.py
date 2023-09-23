@@ -26,7 +26,7 @@ urlpatterns = [
     path('join_room', rooms.JoinRoom, name="join-room"),
     path('invite/<str:code>', rooms.Invite, name='invite'),
     path('invite', rooms.InvitePage, name='invite-room'),
-    path('join/<str:code>', rooms.InviteJoin, name='join')
-
+    path('join/<str:code>', rooms.InviteJoin, name='join'),
+    path('load_messages', room_messages.LoadMessages, name='load-messages')
 
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

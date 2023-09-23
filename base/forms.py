@@ -39,11 +39,10 @@ class RoomForm(ModelForm):
 class ProfileCreationForm(ModelForm):
     class Meta:
         model = UserProfile
-        fields = [
-            'name', 'email']
+        fields = ['email']
 
 
 class ProfileEditform(ModelForm):
     class Meta:
         model = UserProfile
-        fields = ['name', 'email', 'pfp', 'bio']
+        fields = ['email', 'pfp', 'bio']

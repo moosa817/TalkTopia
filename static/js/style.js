@@ -38,7 +38,6 @@ $(window).on("load", function (e) {
 
     $('.modal-btn').click(function () {
         $('#content').addClass('blurPage');
-        console.log("here")
     });
 
     $('.modal-close').click(function () {

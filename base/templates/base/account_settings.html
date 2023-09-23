@@ -14,12 +14,10 @@
                     <span>Change Image</span>
                 </label>
                 <input name="pfp" accept="image/*" id="file" type="file" onchange="loadFile(event)" />
-                <img src="{{ProfileForm.pfp.value}}" id="output" width="200" />
+                <img src="{{user_info.pfp.url}}" id="output" width="200" />
             </div>
 
 
-            <label for="email" class="block my-2 ml-1 text-sm font-medium text-gray-900 dark:text-white">Name</label>
-            {% render_field ProfileForm.name class+="control-form" placeholder+="Enter Name" %}
 
 
             {% if ProfileForm.errors.name %}

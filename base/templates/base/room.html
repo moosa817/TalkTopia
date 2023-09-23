@@ -5,7 +5,6 @@
 {%endif%}
 
 {% load tz %}
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -52,6 +51,9 @@
     <div id="content">
 
 
+        <button id="delete-msg-btn" class="hidden" data-modal-target="deleteMsg" data-modal-toggle="deleteMsg"></button>
+
+
         <span id="room-id" data-room-id="{{room.id}}" data-user="{{request.user}}"></span>
 
         <div class="fixed w-full z-10">
@@ -77,7 +79,7 @@
 
 
                     <button id="dropdownMenuIconButton" data-dropdown-toggle="dropdownDots"
-                        class=" inline-flex items-center  p-2 text-sm font-medium text-center text-gray-900 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none dark:text-white focus:ring-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+                        class=" inline-flex items-center  p-2 text-sm font-medium text-center text-gray-900 bg-gray-200 rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none dark:text-white focus:ring-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
                         type="button">
                         <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
                             viewBox="0 0 4 15">
@@ -198,59 +200,74 @@
         <div id="msg-container" class=" my-20 duration-700 md:w-[80vw] w-[100vw]">
 
             <input type="text" id="rf" class="opacity-0 w-0 h-0">
-            <hr>
+            <center id="loadmore-center">
+                <button id="loadmore">
+                    <div class="text-xs my-4 opacity-50">Load More <i class="fa-plus fa-solid"></i>
+                    </div>
+                </button>
+            </center>
+            <hr class="h-px mt-1 bg-gray-100 border-0 dark:bg-gray-700">
+
             <div id="chat-messages" class="md:mx-10 mx-5 ">
                 {%for message in room_messages %}
-                <div id="{{message.id}}">
-                    <div class="w-full my-4 flex justify-between">
-                        {% pfp_info message.user as user_info %}
+                <div class="counter" id="{{ forloop.counter0 }}">
+                    <div id="msg-{{message.id}}">
+                        <div class="w-full my-4 flex justify-between">
+                            {% pfp_info message.user as user_info %}
 
 
-                        <div class="w-[14vw] min-[400px]:w-[10vw] sm:w-[8vw] md:w-[6vw] lg:w-[5vw] mr-1 ">
-                            <a href="{% url 'profile' message.user %}"><img src="{{user_info.pfp.url}}" alt="img"
-                                    class="md:w-12 md:h-12 w-10 h-10 shadow-xl rounded-full object-cover">
-                            </a>
-                        </div>
+                            <div class="w-[14vw] min-[400px]:w-[10vw] sm:w-[8vw] md:w-[6vw] lg:w-[5vw] mr-1 ">
+                                <a href="{% url 'profile' message.user %}"><img src="{{user_info.pfp.url}}" alt="img"
+                                        class="md:w-12 md:h-12 w-10 h-10 shadow-xl rounded-full object-cover">
+                                </a>
+                            </div>
 
-                        <div class="w-[85vw] sm:w-[92vw] md:w-[94vw]">
+                            <div class="w-[85vw] sm:w-[92vw] md:w-[94vw]">
 
-                            <div class="flex justify-between">
+                                <div class="flex justify-between">
 
-                                <div>
+                                    <div>
 
-                                    <small> <a href="{% url 'profile' message.user %}">@{{message.user}}</a>,
-                                        <span data-time="{{ message.updated|date:'Y-m-d\TH:i:s\Z' }}"
-                                            class="time-updated opacity-70 text-xs">
-                                        </span>
-                                    </small>
+                                        <small> <a href="{% url 'profile' message.user %}">@{{message.user}} </a>,
+                                            <span data-time="{{ message.created|date:'Y-m-d\TH:i:s\Z' }}"
+                                                class="time-updated opacity-70 text-xs">
+                                            </span>
+                                            <span class="is-edited text-xs opacity-50">
 
-                                    <p class="msg-paragraph" style="word-wrap:break-word;word-break: break-word;">
-                                        {{message.body}}
-                                    </p>
-                                </div>
+                                                {%if message.edited %}
+                                                (edited)
+                                                {%endif%}
+                                            </span>
+
+                                        </small>
+
+                                        <p class="msg-paragraph" style="word-wrap:break-word;word-break: break-word;">
+                                            {{message.body}}
+                                        </p>
+                                    </div>
 
 
-                                <div class="flex ">
-                                    {%if message.user == request.user %}
-                                    <button class="mx-2 edit-msg" data-message-id="{{message.id}}"><i
-                                            class="fa-pen fa-solid text-xs md:text-base "></i></button>
+                                    <div class="flex ">
+                                        {%if message.user == request.user %}
+                                        <button class="mx-2 edit-msg" data-message-id="{{message.id}}"><i
+                                                class="fa-pen fa-solid text-xs md:text-base "></i></button>
 
-                                    <button class="mx-2 edit-done hidden" data-message-id="{{message.id}}"><i
-                                            class="fa-check fa-solid text-xs md:text-base "></i></button>
-                                    <button class="delete-msg" data-message-id="{{message.id}}"
-                                        data-modal-target="deleteMsg" data-modal-toggle="deleteMsg"><i
-                                            class="fa-trash text-xs md:text-base text-red-700 fa-solid"></i></button>
-                                    {%endif%}
+                                        <button class="mx-2 edit-done hidden" data-message-id="{{message.id}}"><i
+                                                class="fa-check fa-solid text-xs md:text-base "></i></button>
+                                        <button class="delete-msg" data-message-id="{{message.id}}"><i
+                                                class="fa-trash text-xs md:text-base text-red-700 fa-solid"></i></button>
+                                        {%endif%}
+                                    </div>
                                 </div>
                             </div>
+
+
+
+
+
                         </div>
-
-
-
-
-
+                        <hr class="h-px mt-1 bg-gray-100 border-0 dark:bg-gray-700">
                     </div>
-                    <hr class="h-px mt-1 bg-gray-100 border-0 dark:bg-gray-700">
                 </div>
                 {%endfor%}
             </div>

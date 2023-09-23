@@ -134,9 +134,9 @@
                         <div class="flex justify-end mt-3">
 
                             {% if room.private %}
-                            <span class="locked" title="Locked" class="ml-5 bg-gray-800 rounded-full py-2 px-3"><i
-                                    class="fa-solid fa-lock"></i></span>
-                            {%endif%}
+                            <span title="Locked"
+                                class="locked ml-5 bg-gray-300 dark:bg-gray-800 rounded-full py-2 px-3"><i
+                                    class="fa-solid fa-lock"></i></span>{%endif%}
                             {% if request.user == room.host %}
 
                             <a class="mx-2" href=" {% url 'update-room' room.id %}?from=profile"><button type="button"

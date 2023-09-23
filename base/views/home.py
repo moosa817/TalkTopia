@@ -3,7 +3,7 @@ from ..models import Room
 from django.db.models import Q
 from django.db.models import Count
 from guest_user.decorators import allow_guest_user
-
+from django.conf import settings
 # Create your views here.
 
 
@@ -19,7 +19,7 @@ def home(request):
 
     rooms = Room.objects.filter().order_by(order_by)
 
-    one_page = 10
+    one_page = settings.ROOM_PAGE
     end_page = page * one_page
     start_page = end_page - one_page
 

@@ -1,9 +1,10 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 
-from .models import Room, Message
+from .models import Room, Message, UserProfile
 from django.contrib.auth.models import User
 from asgiref.sync import sync_to_async
+from guest_user.functions import is_guest_user
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
@@ -53,14 +54,28 @@ class ChatConsumer(AsyncWebsocketConsumer):
         await sync_to_async(room.participants.add)(user1)
 
         print("creating ", message)
-        await sync_to_async(Message.objects.create)(
+        msg = await sync_to_async(Message.objects.create)(
             room=room,
             user=user1,
             body=message
         )
 
+        CurrentUser = True if user1 == self.scope.get('user') else False
+
+        TimeUpdated = msg.created.strftime('%Y-%m-%dT%H:%M:%SZ')
+        if await sync_to_async(is_guest_user)(user1):
+            pfp = '/static/img/guest.webp'
+        else:
+            profile = await sync_to_async(UserProfile.objects.get)(username=user1)
+            pfp = profile.pfp.url
+
         await self.send(text_data=json.dumps({
             'message': message,
             'user': user,
+            'id': msg.id,
             'type': 'message',
+            'CurrentUser': CurrentUser,
+            'TimeUpdated': TimeUpdated,
+            'pfp': pfp,
+            'edited': msg.edited
         }))

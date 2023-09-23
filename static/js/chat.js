@@ -1,3 +1,5 @@
+
+
 //for time stamps
 
 function getCurrentUTCTimeFormatted() {
@@ -88,9 +90,12 @@ chatSocket.onopen = function (e) {
 
 chatSocket.onmessage = function (e) {
     let data = JSON.parse(e.data);
-    console.log(data)
     if (data.type === 'message') {
-        AddMessage(data.user, data.message)
+
+        let no = parseInt($('.counter').last().attr('id'))
+        no = no + 1
+
+        AddMessage(data.user, data.message, data.id, data.CurrentUser, data.edited, data.TimeUpdated, data.pfp, no)
 
     }
 }
@@ -128,22 +133,94 @@ $('#chat-form').submit(function (e) {
     }))
 });
 
-function AddMessage(user, message) {
-    html = `    <div>
-                <small> @${user},
-                    <span data-time="${getCurrentUTCTimeFormatted()}" class="time-updated">
-                    </span>
-                </small>
-                <p>
-                    ${message}
-                </p>
-                <a href="{%url 'edit-msg' message.id %}">Edit</a>
-                <a href="{%url 'delete-msg' message.id %}">Delete</a>
+function AddMessage(user, message, message_id, CurrentUser, edited, TimeUpdated, pfp, no, load = false) {
 
-                <hr>
-            </div>`
+    let btn, edited_html;
+    if (edited) {
+        edited_html = `(edited)`
 
-    $('#chat-messages').append(html)
+    } else {
+        edited_html = ''
+    }
+
+    if (CurrentUser) {
+        btn = `  <button class="mx-2 edit-msg" data-message-id="${message_id}"><i
+        class="fa-pen fa-solid text-xs md:text-base " ></i ></button >
+
+                                    <button class="mx-2 edit-done hidden" data-message-id="${message_id}"><i
+                                            class="fa-check fa-solid text-xs md:text-base "></i></button>
+                                    <button class="delete-msg" data-message-id="${message_id}"
+                                        data-modal-target="deleteMsg" data-modal-toggle="deleteMsg"><i
+                                            class="fa-trash text-xs md:text-base text-red-700 fa-solid"></i></button>`
+    } else {
+        btn = ''
+    }
+
+    html = `<div class="counter" id="${no}">
+         <div id="msg-${message_id}">
+                    <div class="w-full my-4 flex justify-between">
+
+
+                        <div class="w-[14vw] min-[400px]:w-[10vw] sm:w-[8vw] md:w-[6vw] lg:w-[5vw] mr-1 ">
+                   
+                        <a href="/profile/${user}"><img src="${pfp}" alt="img"
+                                    class="md:w-12 md:h-12 w-10 h-10 shadow-xl rounded-full object-cover">
+                            </a>
+                            
+
+                        </div>
+
+                        <div class="w-[85vw] sm:w-[92vw] md:w-[94vw]">
+
+                            <div class="flex justify-between">
+
+                                <div>
+
+                                    <small> <a href="profile/${user}">@${user}</a>,
+                                        <span data-time="${TimeUpdated}"
+                                            class="time-updated opacity-70 text-xs">
+                                        </span>
+                       <span class='is-edited text-xs opacity-50'>
+                                        ${edited_html}
+</span>
+
+                                        </small>
+
+                                    <p class="msg-paragraph" style="word-wrap:break-word;word-break: break-word;">
+                                        ${message}
+                                    </p>
+                                </div>
+                                <div class="flex">
+
+
+                                ${btn}
+                                    
+
+
+
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+
+                    </div>
+                    <hr class="h-px mt-1 bg-gray-100 border-0 dark:bg-gray-700">
+                </div>
+                </div>`
+
+
+
+    if (load) {
+        $('#chat-messages').prepend(html)
+
+    } else {
+
+        $('#chat-messages').append(html)
+    }
+
     updateTimestamps();
     window.scrollTo(0, document.body.scrollHeight);
 
@@ -153,7 +230,19 @@ function AddMessage(user, message) {
 // Initial update
 
 // Update timestamps every 10 seconds (adjust the interval as needed)
-setInterval(updateTimestamps, 10000); // 10000 ms = 10 seconds
+setInterval(updateTimestamps, 20000); // 10000 ms = 10 seconds
+
+function UpdateMsgIndex() {
+    $.each($('#chat-messages .counter'), function (indexInArray, currentDiv) {
+        $(currentDiv).attr('id', indexInArray)
+    });
+
+}
+
+
+
+
+
 
 //style for chat 
 //toggle participants 
@@ -210,7 +299,6 @@ $('#join').click(function () {
         url: `/join_room?id=${room_id}`,
         dataType: "",
         success: function (response) {
-            console.log(response)
             if (response.success) {
                 $('#join').hide()
                 $('#leave').removeClass('hidden');
@@ -251,15 +339,18 @@ $('#copy-invite-link').click(function () {
 //delete Msg 
 
 let message_id;
-$('.delete-msg').click(function (e) {
+
+$(document).on("click", ".delete-msg", function () {
+    $('#delete-msg-btn').click()
     message_id = $(this).data('message-id')
-    let a = $(`#${message_id} p`)
+    let a = $(`#msg-${message_id} p`)
     $('#msg-txt-modal').text(a.text())
 })
 
 $('#delete-btn-confirm').click(function (e) {
-    $(`#${message_id}`).fadeOut();
-    // console.log(message_id)
+    $(`#msg-${message_id}`).fadeOut();
+    $(`#msg-${message_id}`).remove();
+    UpdateMsgIndex()
     $.ajax({
         data: {
             pk: message_id,
@@ -275,27 +366,36 @@ $('#delete-btn-confirm').click(function (e) {
 let message_id_edit;
 let classes = "dark:bg-gray-800 bg-gray-200 border rounded"
 
-$('.edit-msg').click(function (e) {
+
+$(document).on("click", ".edit-msg", function () {
     message_id_edit = $(this).data('message-id')
 
-    $(`#${message_id_edit} p`).attr('contenteditable', 'true')
-    $(`#${message_id_edit} p`).addClass(classes);
-    $(`#${message_id_edit} p`).focus();
-    $(`#${message_id_edit} .edit-done`).show()
+    $(`#msg-${message_id_edit} p`).attr('contenteditable', 'true')
+    $(`#msg-${message_id_edit} p`).addClass(classes);
+    $(`#msg-${message_id_edit} p`).focus();
+
+
+
+    $(`#msg-${message_id_edit} .edit-done`).show()
     $(this).hide()
 
 
 })
-$('.edit-done').click(function (e) {
+$(document).on('click', '.edit-done', function (e) {
 
     message_id_edit = $(this).data('message-id')
-    $(`#${message_id_edit} p`).attr('contenteditable', 'false')
-    $(`#${message_id_edit} p`).removeClass(classes);
-    $(`#${message_id_edit} .edit-msg`).show()
-    $(`#${message_id_edit} .edit-done`).hide()
+
+
+    $(`#msg-${message_id_edit} p`).attr('contenteditable', 'false')
+    $(`#msg-${message_id_edit} p`).removeClass(classes);
+    $(`#msg-${message_id_edit} .edit-msg`).show()
+    $(`#msg-${message_id_edit} .edit-done`).hide()
+
+
+
 
     let msg_id = message_id_edit
-    let new_msg = $(`#${message_id_edit} p`).text().trim()
+    let new_msg = $(`#msg-${message_id_edit} p`).text().trim()
 
 
     $.ajax({
@@ -308,18 +408,56 @@ $('.edit-done').click(function (e) {
         url: '/edit-msg'
     })
         .done(function (response) {
+            if (response.success) {
+                $(`#msg-${message_id_edit} .is-edited`).text('(edited)')
+            }
         })
 })
 
 
-$('.msg-paragraph').keypress(function (e) {
+$(document).on('keypress', '.msg-paragraph', function (e) {
     if (e.keyCode === 13) {
         $('.edit-done').click()
     }
 })
-$(".msg-paragraph").keypress(function (e) {
+
+$(document).on('keypress', '.msg-paragraph', function (e) {
     return e.which != 13;
-});
+
+})
+
+
+$('#loadmore').click(function (e) {
+    let last_msg_no = parseInt($('.counter').last().attr('id'))
+    $.ajax({
+        data: {
+            last_msg_no: last_msg_no,
+            room_id: room_id,
+            csrfmiddlewaretoken: window.CSRF_TOKEN
+        },
+        type: 'POST',
+        url: '/load_messages'
+    })
+        .done(function (data) {
+            if (data.length == 0) {
+                $('#loadmore-center').html("<span class='opacity-50 text-xs'>Beginning of Room</span>")
+
+                $('#loadmore').remove()
+            }
+            data.forEach(message => {
+                AddMessage(message.username, message.body, message.id, message.CurrentUser, message.edited, message.created, message.pfp, '1', load = true, edited = message.edited)
+                UpdateMsgIndex()
+                window.scrollTo(0, 0);
+
+
+
+            });
+        })
+
+
+
+})
+
 
 
 window.scrollTo(0, document.body.scrollHeight);

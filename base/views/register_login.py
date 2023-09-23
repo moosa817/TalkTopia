@@ -57,7 +57,6 @@ def RegisterPage(request, backend='django.contrib.auth.backends.ModelBackend'):
 
             profile = UserProfile.objects.create(
                 username=user,
-                name=request.POST.get('name'),
                 email=request.POST.get('email').lower(),
             )
 

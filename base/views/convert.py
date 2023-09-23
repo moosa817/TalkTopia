@@ -50,7 +50,6 @@ class CustomConvertFormView(GuestUserRequiredMixin, ConvertFormView):
                     username=self.request.POST.get('username'))
                 profile = UserProfile.objects.create(
                     username=user,
-                    name=self.request.POST.get('name'),
                     email=self.request.POST.get('email').lower(),
                 )
                 login(self.request, authenticate(

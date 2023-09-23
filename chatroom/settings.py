@@ -194,3 +194,9 @@ MAIL_EMAIL_RECIVER = getenv("EMAIL_RECIEVER")
 MAIL_SERVER = getenv("MAIL_SERVER")
 MAIL_PORT = 587
 MAIL_USER = getenv("MAIL_USER")
+
+
+# other settings
+
+ROOM_PAGE = 10  # rooms to show per page
+MESSAGE_ROOM = 10  # messages to show per room
