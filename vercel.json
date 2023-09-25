@@ -1,14 +1,14 @@
 {
     "builds": [
         {
-            "src": "chatroom/wsgi.py",
+            "src": "chatroom/asgi.py",
             "use": "@vercel/python"
         }
     ],
     "routes": [
         {
             "src": "/(.*)",
-            "dest": "chatroom/wsgi.py"
+            "dest": "chatroom/asgi.py"
         }
     ]
 }
