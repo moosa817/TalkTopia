@@ -19,10 +19,9 @@
 
 
                     <a href="/" class="flex md:mr-4">
-                        <img src="https://flowbite.s3.amazonaws.com/logo.svg" class="mr-2 h-6 md:h-8"
-                            alt="FlowBite Logo" />
+                        <img src="{% static 'img/logo.png'%}" class="mr-2 h-6 md:h-8" alt="Logo" />
                         <span
-                            class="self-center text-md md:text-2xl font-semibold whitespace-nowrap dark:text-white">Flowbite</span>
+                            class="self-center text-md md:text-2xl font-semibold whitespace-nowrap dark:text-white">TalkTopia</span>
                     </a>
 
 
@@ -88,7 +87,8 @@
                             class="flex mx-3 text-sm rounded-full border border-primary-glow-green md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
                             id="user-menu-button" aria-expanded="false" data-dropdown-toggle="dropdown">
                             <span class="sr-only">Open user menu</span>
-                            <img class="w-8 h-8 object-cover rounded-full" src="{{user_info.pfp.url}}" alt="user photo">
+                            <img class="w-8 h-8 object-cover rounded-full" src="{{user_info.pfp_crop.url}}"
+                                alt="user photo">
                         </button>
                         <!-- Dropdown menu -->
                         <div class="hidden z-50 my-4 w-56 text-base list-none bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600"

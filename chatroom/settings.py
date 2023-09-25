@@ -49,7 +49,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'base.apps.BaseConfig',
     'widget_tweaks',
-    'guest_user'
+    'guest_user',
+    'imagekit'
 ]
 
 AUTHENTICATION_BACKENDS = [
@@ -94,28 +95,32 @@ ASGI_APPLICATION = 'chatroom.asgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+DB_NAME = getenv('DB_NAME')
+DB_USER = getenv('DB_USER')
+DB_PWD = getenv('DB_PWD')
+DB_HOST = getenv('DB_HOST')
+DB_PORT = getenv('DB_PORT')
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": "django.db.backends.mysql",
+        "NAME": DB_NAME,
+        "USER": DB_USER,
+        "PASSWORD": DB_PWD,
+        "HOST": DB_HOST,
+        "PORT": DB_PORT,
     }
 }
 
 
 CHANNEL_LAYERS = {
     'default': {
-        'BACKEND': 'channels.layers.InMemoryChannelLayer',
-    }
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [(getenv('REDIS_HOST'))],
+        },
+    },
 }
-
-# CHANNEL_LAYERS = {
-#     'default': {
-#         'BACKEND': 'channels_redis.core.RedisChannelLayer',
-#         'CONFIG': {
-#             'hosts': [('redis://:hzKHvNr6JUFCVbyzHtKfHvrJQKh1yP2v@redis-17732.c261.us-east-1-4.ec2.cloud.redislabs.com:17732/0')],
-#         },
-#     },
-# }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators

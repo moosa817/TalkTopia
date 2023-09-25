@@ -13,10 +13,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         room_id = self.scope['url_route']['kwargs']['pk']
         self.room_id = room_id
-        print(room_id)
 
         self.room_group_name = f'chat_{room_id}'
-        print("adding ig")
         await self.channel_layer.group_add(
             self.room_group_name,
             self.channel_name
@@ -53,7 +51,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
         user1 = await sync_to_async(User.objects.get)(username=user)
         await sync_to_async(room.participants.add)(user1)
 
-        print("creating ", message)
         msg = await sync_to_async(Message.objects.create)(
             room=room,
             user=user1,
@@ -67,7 +64,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             pfp = '/static/img/guest.webp'
         else:
             profile = await sync_to_async(UserProfile.objects.get)(username=user1)
-            pfp = profile.pfp.url
+            pfp = profile.pfp_crop.url
 
         await self.send(text_data=json.dumps({
             'message': message,

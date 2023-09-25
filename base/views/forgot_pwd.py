@@ -117,11 +117,9 @@ def ForgotPwd(request, backend='django.contrib.auth.backends.ModelBackend'):
                         email=request.session.get('email')).username
 
                     user = User.objects.get(username=myuser)
-                    print("password is valid")
                     user.set_password(pwd)
                     user.save()
                     login(request, user, backend=backend)
                     return redirect('home')
 
-    print(request.session.get('code'))
     return render(request, 'base/forgot.html', context)

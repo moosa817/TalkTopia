@@ -4,14 +4,19 @@ from django.contrib.auth.models import User
 from django.utils.text import slugify
 import random
 import string
+from imagekit.models import ImageSpecField
+from imagekit.processors import ResizeToFill
 
 
 class UserProfile(models.Model):
     username = models.OneToOneField(User, on_delete=models.CASCADE)
     email = models.EmailField(unique=True)
+    bio = models.TextField(null=True, blank=True)
+
     pfp = models.ImageField(upload_to='images/',
                             default='/images/guest.webp')
-    bio = models.TextField(null=True, blank=True)
+    pfp_crop = ImageSpecField(source='pfp', processors=[
+                              ResizeToFill(64, 64)], format='PNG', options={'quality': 60})
 
     def __str__(self):
         return self.email

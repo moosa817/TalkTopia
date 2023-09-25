@@ -5,9 +5,11 @@ autobahn==23.6.2
 Automat==22.10.0
 boto3==1.28.43
 botocore==1.31.43
+certifi==2023.7.22
 cffi==1.15.1
 channels==4.0.0
 channels-redis==4.1.0
+charset-normalizer==3.2.0
 constantly==15.1.0
 cryptography==41.0.2
 daphne==4.0.0
@@ -15,6 +17,7 @@ Django==4.2.3
 django-appconf==1.0.5
 django-db-connection-pool==1.2.4
 django-guest-user==0.5.4
+django-imagekit==4.1.0
 django-storages==1.14
 django-widget-tweaks==1.5.0
 greenlet==2.0.2
@@ -24,7 +27,8 @@ incremental==22.10.0
 jmespath==1.0.1
 msgpack==1.0.5
 mysqlclient==2.2.0
-Pillow==10.0.0
+pilkit==2.0
+Pillow==9.0.0
 pyasn1==0.5.0
 pyasn1-modules==0.3.0
 pycparser==2.21
@@ -33,10 +37,12 @@ python-dateutil==2.8.2
 python-dotenv==1.0.0
 rcssmin==1.1.1
 redis==4.6.0
+requests==2.31.0
 rjsmin==1.2.1
 s3transfer==0.6.2
 service-identity==23.1.0
 six==1.16.0
+sorl-thumbnail==12.9.0
 SQLAlchemy==2.0.19
 sqlparams==5.1.0
 sqlparse==0.4.4

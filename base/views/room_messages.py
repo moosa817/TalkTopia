@@ -82,7 +82,7 @@ def LoadMessages(request):
         room = Room.objects.get(id=room_id)
 
         room_messages = room.message_set.all().order_by(
-            '-created')[last_msg_no:last_msg_no+10]
+            '-created')[last_msg_no:last_msg_no+settings.MESSAGE_ROOM]
         # room_messages = reversed(room_messages)
 
         messages_list = []

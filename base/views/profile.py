@@ -101,7 +101,6 @@ def AccountSettings(request):
 
                 else:
                     # Old password is incorrect, show an error message
-                    print("wrong password mf")
                     userForm.add_error(
                         'old_password', 'Old password is incorrect.')
                     context = {'ProfileForm': ProfileForm,

@@ -27,12 +27,12 @@ def pfp_info(username):
         user_profile = UserProfile.objects.get(username=username)
         return user_profile
     except UserProfile.DoesNotExist:
-        return {"pfp": {'url': "/static/img/guest.webp"}}
+        return {"pfp_crop": {'url': "/static/img/guest.webp"}}
 
 
 def pfp_url(username):
     try:
         user_profile = UserProfile.objects.get(username=username)
-        return user_profile.pfp.url
+        return user_profile.pfp_crop.url
     except UserProfile.DoesNotExist:
         return "/static/img/guest.webp"

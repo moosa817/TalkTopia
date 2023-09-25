@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from ..models import Room
+from ..models import Room, UserProfile
 from django.db.models import Q
 from django.db.models import Count
 from guest_user.decorators import allow_guest_user
@@ -49,4 +49,5 @@ def home(request):
 
     context = {'rooms': rooms,
                'q': q, 'topics_only': topics_only, 'room_count': room_count, 'last_page': last_page}
+
     return render(request, 'base/home.html', context)

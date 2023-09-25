@@ -147,7 +147,6 @@ def JoinRoom(request):
                 room.participants.add(request.user)
             return JsonResponse({'success': True})
         except Exception as e:
-            print(e)
             return redirect('home')
 
 
