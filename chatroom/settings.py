@@ -93,7 +93,8 @@ TEMPLATES = [
     },
 ]
 
-ASGI_APPLICATION = 'chatroom.asgi.application'
+# ASGI_APPLICATION = 'chatroom.asgi.application'
+WSGI_APPLICATION = 'chatroom.wsgi.application'
 
 
 # Database
