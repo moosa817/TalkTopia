@@ -14,6 +14,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 from dotenv import load_dotenv
 from os import getenv
+import dj_database_url
 
 GUEST_USER_NAME_GENERATOR = 'guest_user.functions.generate_numbered_username'
 GUEST_USER_CONVERT_REDIRECT_URL = 'home'
@@ -95,22 +96,19 @@ ASGI_APPLICATION = 'chatroom.asgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DB_NAME = getenv('DB_NAME')
-DB_USER = getenv('DB_USER')
-DB_PWD = getenv('DB_PWD')
-DB_HOST = getenv('DB_HOST')
-DB_PORT = getenv('DB_PORT')
 
+# this gets overwritten
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.mysql",
-        "NAME": DB_NAME,
-        "USER": DB_USER,
-        "PASSWORD": DB_PWD,
-        "HOST": DB_HOST,
-        "PORT": DB_PORT,
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# requires a env for mysql str
+
+DATABASES['default'] = dj_database_url.config(
+    conn_max_age=600, ssl_require=False)
 
 
 CHANNEL_LAYERS = {

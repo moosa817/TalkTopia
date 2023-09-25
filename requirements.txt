@@ -13,6 +13,7 @@ charset-normalizer==3.2.0
 constantly==15.1.0
 cryptography==41.0.2
 daphne==4.0.0
+dj-database-url==2.1.0
 Django==4.2.3
 django-appconf==1.0.5
 django-db-connection-pool==1.2.4
@@ -26,12 +27,12 @@ idna==3.4
 incremental==22.10.0
 jmespath==1.0.1
 msgpack==1.0.5
-mysqlclient==2.2.0
 pilkit==2.0
 Pillow==9.0.0
 pyasn1==0.5.0
 pyasn1-modules==0.3.0
 pycparser==2.21
+PyMySQL==1.1.0
 pyOpenSSL==23.2.0
 python-dateutil==2.8.2
 python-dotenv==1.0.0
