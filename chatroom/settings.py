@@ -30,12 +30,15 @@ load_dotenv(BASE_DIR / '.env')
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-ruw494j&#b4+r%$k-$a)+w5ru2%kpi3kjv2!av+4_71p5)x=br'
+SECRET_KEY = getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '192.168.18.123']
+
+DEBUG = bool(getenv('DEBUG'))
+
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost',
+                 '192.168.18.123', 'talktopia.vercel.app']
 
 
 # Application definition
@@ -201,5 +204,5 @@ MAIL_USER = getenv("MAIL_USER")
 
 # other settings
 
-ROOM_PAGE = 10  # rooms to show per page
-MESSAGE_ROOM = 10  # messages to show per room
+ROOM_PAGE = int(getenv('ROOM_PAGE'))  # rooms to show per page
+MESSAGE_ROOM = int(getenv('MESSAGE_ROOM'))  # messages to show per room
