@@ -25,4 +25,4 @@ application = ProtocolTypeRouter({
     )
 })
 
-app = application
+app = get_asgi_application()
