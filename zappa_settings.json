@@ -1,0 +1,9 @@
+{
+    "dev": {
+        "django_settings": "chatroom.settings",
+        "profile_name": null,
+        "project_name": "talktopia",
+        "runtime": "python3.10",
+        "s3_bucket": "happens817"
+    }
+}
