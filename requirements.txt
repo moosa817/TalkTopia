@@ -7,12 +7,9 @@ boto3==1.28.43
 botocore==1.31.43
 certifi==2023.7.22
 cffi==1.15.1
-channels==4.0.0
-channels-redis==4.1.0
 charset-normalizer==3.2.0
 constantly==15.1.0
 cryptography==41.0.2
-daphne==4.0.0
 dj-database-url==2.1.0
 Django==4.2.3
 django-appconf==1.0.5
@@ -37,7 +34,6 @@ pyOpenSSL==23.2.0
 python-dateutil==2.8.2
 python-dotenv==1.0.0
 rcssmin==1.1.1
-redis==4.6.0
 requests==2.31.0
 rjsmin==1.2.1
 s3transfer==0.6.2
