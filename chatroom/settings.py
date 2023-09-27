@@ -38,7 +38,7 @@ SECRET_KEY = getenv('SECRET_KEY')
 DEBUG = bool(getenv('DEBUG'))
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost',
-                 '192.168.18.123', 'talktopia.vercel.app']
+                 '192.168.18.123', 'talktopia.vercel.app', '.vercel.app']
 
 
 # Application definition
