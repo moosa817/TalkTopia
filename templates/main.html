@@ -26,13 +26,12 @@
         crossorigin='anonymous' referrerpolicy='no-referrer'></script>
 
 
-    <link rel="stylesheet" href="{% static 'css/dist/output.css' %}">
-    <link rel="stylesheet" href="{%static 'css/dist/style.css'%}">
+    <link rel="stylesheet" href="{% static 'base/css/dist/output.css' %}">
+    <link rel="stylesheet" href="{%static 'base/css/dist/style.css'%}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
         integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-    <link rel="shortcut icon" href="{% static 'img/logo.png'%}" type="image/x-icon">
+    <link rel='icon' href="{%static 'base/img/favicon.ico'%}" type='image/x-icon' />
 </head>
 
 <body class="bg-green-50 dark:bg-primary-darktheme dark:text-white">
@@ -43,14 +42,14 @@
     {%include 'base/components/alerts.html' %}
 
 
-    <div id="content">
+    <div id=" content">
         {% block content %}
         {% endblock content %}
     </div>
 
 
 
-    <script src="{% static 'js/style.js' %}"></script>
+    <script src="{% static 'base/js/style.js' %}"></script>
 </body>
 
 </html>

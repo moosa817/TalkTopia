@@ -61,7 +61,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         TimeUpdated = msg.created.strftime('%Y-%m-%dT%H:%M:%SZ')
         if await sync_to_async(is_guest_user)(user1):
-            pfp = '/static/img/guest.webp'
+            pfp = '/static/base/img/guest.webp'
         else:
             profile = await sync_to_async(UserProfile.objects.get)(username=user1)
             pfp = profile.pfp_crop.url

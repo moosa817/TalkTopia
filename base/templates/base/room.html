@@ -12,6 +12,7 @@
     {%if request.user%}
     <meta id="current_user" data-user="{{request.user.username}}">
     {%endif%}
+    <link rel='icon' href="{%static 'base/img/favicon.ico'%}" type='image/x-icon' />
 
 
 
@@ -27,22 +28,22 @@
 
 
 
-    <link rel="stylesheet" href="{% static 'css/dist/output.css' %}">
-    <link rel="stylesheet" href="{%static 'css/dist/style.css'%}">
+    <link rel="stylesheet" href="{% static 'base/css/dist/output.css' %}">
+    <link rel="stylesheet" href="{%static 'base/css/dist/style.css'%}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
         integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-    <link rel="stylesheet" href="{%static 'css/dist/emojionearea.min.css' %}">
+    <link rel="stylesheet" href="{%static 'base/css/dist/emojionearea.min.css' %}">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/emojionearea/3.4.2/emojionearea.min.js"
         integrity="sha512-hkvXFLlESjeYENO4CNi69z3A1puvONQV5Uh+G4TUDayZxSLyic5Kba9hhuiNLbHqdnKNMk2PxXKm0v7KDnWkYA=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-    <script src="{% static 'js/style.js' %}" defer></script>
+    <script src="{% static 'base/js/style.js' %}" defer></script>
 
 
-    <script src="{% static 'js/chat.js' %}" defer></script>
+    <script src="{% static 'base/js/chat.js' %}" defer></script>
 </head>
 
 <body class="bg-green-50 dark:bg-primary-darktheme dark:text-white">

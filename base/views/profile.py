@@ -55,7 +55,7 @@ def AccountSettings(request):
         profile_dict.pop('id')
 
         if profile_dict['pfp'] == '/images/guest.webp':
-            profile_dict['pfp'] = '/static/img/guest.webp'
+            profile_dict['pfp'] = '/static/base/img/guest.webp'
 
         return profile_dict
 

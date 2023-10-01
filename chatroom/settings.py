@@ -38,13 +38,15 @@ SECRET_KEY = getenv('SECRET_KEY')
 DEBUG = bool(getenv('DEBUG'))
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost',
-                 '192.168.18.123', 'talktopia.vercel.app', '.vercel.app']
+                 '192.168.18.123', 'talktopia.vercel.app', '.vercel.app', '*', '.']
 
 
 # Application definition
 
 INSTALLED_APPS = [
     'daphne',
+    'imagekit',
+    'channels',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -54,7 +56,6 @@ INSTALLED_APPS = [
     'base.apps.BaseConfig',
     'widget_tweaks',
     'guest_user',
-    'imagekit'
 ]
 
 AUTHENTICATION_BACKENDS = [
@@ -94,7 +95,6 @@ TEMPLATES = [
 ]
 
 ASGI_APPLICATION = 'chatroom.asgi.application'
-# WSGI_APPLICATION = 'chatroom.wsgi.application'
 
 
 # Database
@@ -159,6 +159,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'static/'
+
 
 MEDIA_URL = '/uploads/'
 
@@ -166,7 +168,7 @@ MEDIA_ROOT = BASE_DIR / 'uploads'
 
 
 STATICFILES_DIRS = [
-    BASE_DIR / "static",
+
 ]
 
 

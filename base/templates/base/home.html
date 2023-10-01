@@ -123,7 +123,7 @@
                 <div class=" p-4 leading-normal">
                     <div class="flex justify-between">
                         <div>
-                            <img src="{% static 'img/guest.webp'%}" class="w-6 inline-block rounded-full"
+                            <img src="{% static 'base/img/guest.webp'%}" class="w-6 inline-block rounded-full"
                                 alt="User pfp">
                             <a href="{%url 'profile' room.host %}" class="text-gray-400">@{{room.host}}</a>
                         </div>
@@ -212,6 +212,6 @@
     const last_page = parseInt('{{ last_page }}')
 </script>
 <script type="text/javascript">     window.CSRF_TOKEN = "{{ csrf_token }}"; </script>
-<script src="{% static 'js/home.js' %}" defer></script>
+<script src="{% static 'base/js/home.js' %}" defer></script>
 
 {%endblock%}
