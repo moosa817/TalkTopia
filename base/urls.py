@@ -29,4 +29,4 @@ urlpatterns = [
     path('join/<str:code>', rooms.InviteJoin, name='join'),
     path('load_messages', room_messages.LoadMessages, name='load-messages')
 
-]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
