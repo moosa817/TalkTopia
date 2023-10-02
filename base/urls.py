@@ -30,3 +30,5 @@ urlpatterns = [
     path('load_messages', room_messages.LoadMessages, name='load-messages')
 
 ]
+
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
