@@ -35,8 +35,7 @@ SECRET_KEY = getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 
 
-DEBUG = bool(getenv('DEBUG'))
-
+DEBUG = True if getenv('DEBUG',None) == 'True' else False
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost',
                  '192.168.18.123', 'talktopia.vercel.app', '.vercel.app', '*', '.']
 
@@ -44,9 +43,7 @@ ALLOWED_HOSTS = ['127.0.0.1', 'localhost',
 # Application definition
 
 INSTALLED_APPS = [
-    'daphne',
     'imagekit',
-    'channels',
     'storages',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -73,7 +70,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-  'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'chatroom.urls'
@@ -106,12 +102,10 @@ ASGI_APPLICATION = 'chatroom.asgi.application'
 # this gets overwritten
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
-# requires a env for mysql str
+# requires a env for db str (using postgressql)
 
 DATABASES['default'] = dj_database_url.config(
     conn_max_age=600, ssl_require=False)
@@ -169,23 +163,25 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AWS_ACCESS_KEY_ID = getenv("AWS_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = getenv("AWS_SECRET_ACCESS_KEY")
 AWS_STORAGE_BUCKET_NAME = getenv("AWS_STORAGE_BUCKET_NAME")
+CLOUDFRONT_DOMAIN = getenv('CLOUDFRONT_DOMAIN')
+
+AWS_QUERYSTRING_EXPIRE = 604800
+
 AWS_S3_SIGNATURE_NAME = 's3v4',
 AWS_S3_REGION_NAME = 'us-east-1'
 AWS_S3_FILE_OVERWRITE = False
 AWS_DEFAULT_ACL = None
 AWS_S3_VERITY = True
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+AWS_S3_CUSTOM_DOMAIN = CLOUDFRONT_DOMAIN
 
 
 
 if DEBUG == False:
-    AWS_DEFAULT_ACL = 'public-read'
-    AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
-    AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
-    # s3 static settings
-    AWS_LOCATION = 'static'
-    STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION}/'
-    STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    STATIC_LOCATION = "static"
+    STATIC_URL = f'{CLOUDFRONT_DOMAIN}/static/'
+    # Add your path in the STATICFILES_STORAGE
+    STATICFILES_STORAGE = 'chatroom.storage_backends.StaticStorage'
 else:
     STATIC_URL = 'static/'
     
