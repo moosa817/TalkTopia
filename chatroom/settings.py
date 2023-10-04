@@ -203,6 +203,6 @@ MAIL_USER = getenv("MAIL_USER")
 
 
 # other settings
-
+WS_URL = getenv('WS_URL')
 ROOM_PAGE = int(getenv('ROOM_PAGE'))  # rooms to show per page
 MESSAGE_ROOM = int(getenv('MESSAGE_ROOM'))  # messages to show per room

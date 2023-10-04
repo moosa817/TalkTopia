@@ -32,7 +32,7 @@ def room(request, pk):
         return redirect('home')
 
     context = {'room': room, 'room_messages': room_messages,
-               'participants': participants}
+               'participants': participants,'ws_url':settings.WS_URL}
 
     return render(request, 'base/room.html', context)
 

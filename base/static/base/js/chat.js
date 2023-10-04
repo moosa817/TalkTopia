@@ -70,17 +70,11 @@ updateTimestamps();
 
 // connecting websocket to chat
 
-let protocol = 'ws'
 
-
-
-if (window.location.protocol === 'https:') {
-    protocol = 'wss'
-}
 let room_id = $('#room-id').data('room-id')
 const USER = $('#room-id').data('user')
 
-let url = `${protocol}://${window.location.host}/ws/chat/${room_id}`
+let url = window.WS_URL
 
 const chatSocket = new WebSocket(url);
 

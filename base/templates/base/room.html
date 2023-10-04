@@ -341,6 +341,9 @@
     {%include 'base/components/modals.html'%}
 
 </body>
-<script type="text/javascript">     window.CSRF_TOKEN = "{{ csrf_token }}"; </script>
+<script type="text/javascript">window.CSRF_TOKEN = "{{ csrf_token }}";
+    window.WS_URL = "{{ws_url}}"
+
+</script>
 
 </html>
