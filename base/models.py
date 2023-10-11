@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+
 # Create your models here.
 from django.utils.text import slugify
 import random
@@ -13,10 +14,13 @@ class UserProfile(models.Model):
     email = models.EmailField(unique=True)
     bio = models.TextField(null=True, blank=True)
 
-    pfp = models.ImageField(upload_to='images/',
-                            default='/images/guest.webp')
-    pfp_crop = ImageSpecField(source='pfp', processors=[
-                              ResizeToFill(64, 64)], format='PNG', options={'quality': 60})
+    pfp = models.ImageField(upload_to="images/", default="/images/guest.webp")
+    pfp_crop = ImageSpecField(
+        source="pfp",
+        processors=[ResizeToFill(64, 64)],
+        format="PNG",
+        options={"quality": 60},
+    )
 
     def __str__(self):
         return self.email
@@ -33,8 +37,7 @@ class Room(models.Model):
     host = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     topic = models.ForeignKey(Topic, on_delete=models.SET_NULL, null=True)
     name = models.CharField(max_length=200, unique=True)
-    participants = models.ManyToManyField(
-        User, related_name='participants', blank=True)
+    participants = models.ManyToManyField(User, related_name="participants", blank=True)
     description = models.TextField(blank=True, null=True)
     private = models.BooleanField(default=False)
 
@@ -59,8 +62,9 @@ class Room(models.Model):
     def generate_unique_invite_code(self):
         # Generate a unique invite code
         while True:
-            invite_code = ''.join(random.choice(
-                string.ascii_letters + string.digits) for _ in range(6))
+            invite_code = "".join(
+                random.choice(string.ascii_letters + string.digits) for _ in range(6)
+            )
             if not Room.objects.filter(invite_code=invite_code).exists():
                 return invite_code
 
@@ -70,7 +74,7 @@ class Room(models.Model):
 
 class Message(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    room = models.ForeignKey('Room', on_delete=models.CASCADE)
+    room = models.ForeignKey("Room", on_delete=models.CASCADE)
     body = models.TextField()
     edited = models.BooleanField(default=False)
     updated = models.DateTimeField(auto_now=True)
@@ -78,3 +82,8 @@ class Message(models.Model):
 
     def __str__(self):
         return str(self.body)[0:50]
+
+
+class WebsocketSessions(models.Model):
+    room = models.ForeignKey("Room", on_delete=models.CASCADE)
+    conn_id = models.CharField()
