@@ -74,9 +74,12 @@ updateTimestamps();
 let room_id = $('#room-id').data('room-id')
 const USER = $('#room-id').data('user')
 
-let url = window.WS_URL
 
-const chatSocket = new WebSocket(url);
+
+let url = window.WS_URL + '?room=' + room_id
+
+
+const chatSocket = new ReconnectingWebSocket(url);
 
 chatSocket.onopen = function (e) {
     console.log('Connected to chat socket')
@@ -105,7 +108,11 @@ $('#chat-form').keydown(function (e) {
 
     }
 });
-
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+}
 
 $('#chat-form').submit(function (e) {
     e.preventDefault();
@@ -122,8 +129,11 @@ $('#chat-form').submit(function (e) {
     this.reset()
     $('.emojionearea-editor').text('')
     chatSocket.send(JSON.stringify({
+        'action': 'sendMessage',
         'message': message,
-        'user': USER,
+        'user_id': USER_ID,
+        'room': room_id.toString(),
+        'sessionid': getCookie('sessionid')
     }))
 });
 
