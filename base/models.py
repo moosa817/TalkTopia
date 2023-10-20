@@ -7,6 +7,8 @@ import random
 import string
 from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill
+from imagekit.models import ProcessedImageField
+from imagekit.processors import ResizeToFit
 
 
 class UserProfile(models.Model):
@@ -14,12 +16,12 @@ class UserProfile(models.Model):
     email = models.EmailField(unique=True)
     bio = models.TextField(null=True, blank=True)
 
-    pfp = models.ImageField(upload_to="images/", default="/images/guest.webp")
-    pfp_crop = ImageSpecField(
-        source="pfp",
-        processors=[ResizeToFill(64, 64)],
+    pfp = ProcessedImageField(
+        upload_to="images/",
         format="PNG",
+        processors=[ResizeToFit(64, 64)],
         options={"quality": 60},
+        default="/images/guest.webp",
     )
 
     def __str__(self):

@@ -41,8 +41,6 @@ ALLOWED_HOSTS = [
     "192.168.18.123",
     "talktopia.vercel.app",
     ".vercel.app",
-    "*",
-    ".",
 ]
 
 

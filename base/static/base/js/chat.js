@@ -92,7 +92,11 @@ chatSocket.onmessage = function (e) {
         let no = parseInt($('.counter').last().attr('id'))
         no = no + 1
 
-        AddMessage(data.user, data.message, data.id, data.CurrentUser, data.edited, data.TimeUpdated, data.pfp, no)
+        let CurrentUser
+        if (data.user == USER) {
+            CurrentUser = true
+        }
+        AddMessage(data.user, data.message, data.id, CurrentUser, data.edited, data.TimeUpdated, data.pfp, no)
 
     }
 }

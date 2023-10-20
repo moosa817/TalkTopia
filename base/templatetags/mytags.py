@@ -35,7 +35,7 @@ def pfp_info(username):
         return user_profile
     except UserProfile.DoesNotExist:
         return {
-            "pfp_crop": {
+            "pfp": {
                 "url": "https://dvbewjfodfte3.cloudfront.net/static/base/img/guest.webp"
             }
         }
@@ -44,6 +44,6 @@ def pfp_info(username):
 def pfp_url(username):
     try:
         user_profile = UserProfile.objects.get(username=username)
-        return user_profile.pfp_crop.url
+        return user_profile.pfp.url
     except UserProfile.DoesNotExist:
         return "/static/base/img/guest.webp"
