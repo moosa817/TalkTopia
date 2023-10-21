@@ -121,6 +121,7 @@ function getCookie(name) {
 $('#chat-form').submit(function (e) {
     e.preventDefault();
 
+
     // reason without focusing outside message, message is null 
     let r = document.getElementById('rf')
     r.focus()
@@ -132,13 +133,19 @@ $('#chat-form').submit(function (e) {
 
     this.reset()
     $('.emojionearea-editor').text('')
-    chatSocket.send(JSON.stringify({
-        'action': 'sendMessage',
-        'message': message,
-        'user_id': USER_ID,
-        'room': room_id.toString(),
-        'sessionid': getCookie('sessionid')
-    }))
+    if (message == "") {
+
+    } else {
+
+        chatSocket.send(JSON.stringify({
+            'action': 'sendMessage',
+            'message': message,
+            'user_id': USER_ID,
+            'room': room_id.toString(),
+            'sessionid': getCookie('sessionid')
+        }))
+    }
+
 });
 
 function AddMessage(user, message, message_id, CurrentUser, edited, TimeUpdated, pfp, no, load = false) {
