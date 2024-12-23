@@ -1,4 +1,5 @@
-
+$('#content').fadeOut();
+$('#load-div').fadeIn();
 
 //for time stamps
 
@@ -83,6 +84,11 @@ const chatSocket = new ReconnectingWebSocket(url);
 
 chatSocket.onopen = function (e) {
     console.log('Connected to chat socket')
+    // one sec sleep
+    setTimeout(function () {
+        $('#content').fadeIn();
+        $('#load-div').fadeOut();
+    }, 1000)
 }
 
 chatSocket.onmessage = function (e) {
