@@ -9,3 +9,4 @@ etc.txt
 uploads/
 .env
 vercel_env
+backup.sql

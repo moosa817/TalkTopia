@@ -31,8 +31,10 @@ def room(request, pk):
     if request.user not in participants and room.private:
         return redirect('home')
 
+    pfp = pfp_url(request.user)
+
     context = {'room': room, 'room_messages': room_messages,
-               'participants': participants,'ws_url':settings.WS_URL}
+               'participants': participants,'ws_url':settings.WS_URL,'pfp':pfp}
 
     return render(request, 'base/room.html', context)
 

@@ -47,6 +47,7 @@ ALLOWED_HOSTS = [
 # Application definition
 
 INSTALLED_APPS = [
+    "base.apps.BaseConfig",
     "imagekit",
     "storages",
     "django.contrib.admin",
@@ -55,7 +56,6 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "base.apps.BaseConfig",
     "widget_tweaks",
     "guest_user",
 ]

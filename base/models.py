@@ -81,11 +81,12 @@ class Message(models.Model):
     edited = models.BooleanField(default=False)
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
+    msg_number = models.IntegerField()  # nth message in the room
 
     def __str__(self):
         return str(self.body)[0:50]
 
 
 class WebsocketSessions(models.Model):
-    room = models.ForeignKey("Room", on_delete=models.CASCADE)
+    room = models.ForeignKey("Room", on_delete=models.CASCADE, db_index=True)
     conn_id = models.CharField()

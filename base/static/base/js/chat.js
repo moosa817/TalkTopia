@@ -58,7 +58,9 @@ function updateTimestamps() {
         } else {
             formattedTime = `${diffInSeconds} second${diffInSeconds !== 1 ? 's' : ''} ago`;
         }
-
+        if (diffInSeconds <= 0) {
+            formattedTime = 'Just now';
+        }
         $timestamp.text(formattedTime);
     });
 }
@@ -74,6 +76,7 @@ updateTimestamps();
 
 let room_id = $('#room-id').data('room-id')
 const USER = $('#room-id').data('user')
+const PFP = $('#room-id').data('pfp')
 
 
 
@@ -102,7 +105,9 @@ chatSocket.onmessage = function (e) {
         if (data.user == USER) {
             CurrentUser = true
         }
-        AddMessage(data.user, data.message, data.id, CurrentUser, data.edited, data.TimeUpdated, data.pfp, no)
+        console.log("message receieved")
+        console.log(data)
+        AddMessage(data.user, data.message, data.id, CurrentUser, data.edited, data.TimeUpdated, data.pfp, no, load = false, sent = true)
 
     }
 }
@@ -142,6 +147,11 @@ $('#chat-form').submit(function (e) {
     if (message == "") {
 
     } else {
+        console.log("sending message")
+
+        let no = parseInt($('.counter').last().attr('id'))
+        no = no + 1
+        AddMessage(USER, message, message_id = null, USER, edited = false, getCurrentUTCTimeFormatted(), PFP, no)
 
         chatSocket.send(JSON.stringify({
             'action': 'sendMessage',
@@ -154,98 +164,72 @@ $('#chat-form').submit(function (e) {
 
 });
 
-function AddMessage(user, message, message_id, CurrentUser, edited, TimeUpdated, pfp, no, load = false) {
-
+function AddMessage(user, message, message_id, CurrentUser, edited, TimeUpdated, pfp, no, load = false, sent = false) {
     let btn, edited_html;
     if (edited) {
-        edited_html = `(edited)`
-
+        edited_html = `(edited)`;
     } else {
-        edited_html = ''
+        edited_html = '';
     }
 
     if (CurrentUser) {
         btn = `  <button class="mx-2 edit-msg" data-message-id="${message_id}"><i
-        class="fa-pen fa-solid text-xs md:text-base " ></i ></button >
+        class="fa-pen fa-solid text-xs md:text-base"></i></button>
 
-                                    <button class="mx-2 edit-done hidden" data-message-id="${message_id}"><i
-                                            class="fa-check fa-solid text-xs md:text-base "></i></button>
-                                    <button class="delete-msg" data-message-id="${message_id}"
-                                        data-modal-target="deleteMsg" data-modal-toggle="deleteMsg"><i
-                                            class="fa-trash text-xs md:text-base text-red-700 fa-solid"></i></button>`
+                <button class="mx-2 edit-done hidden" data-message-id="${message_id}"><i
+                        class="fa-check fa-solid text-xs md:text-base"></i></button>
+                <button class="delete-msg" data-message-id="${message_id}"
+                    data-modal-target="deleteMsg" data-modal-toggle="deleteMsg"><i
+                        class="fa-trash text-xs md:text-base text-red-700 fa-solid"></i></button>`;
     } else {
-        btn = ''
+        btn = '';
     }
 
-    html = `<div class="counter" id="${no}">
+    // Add a CSS class for unsent messages
+    const sentClass = sent ? '' : 'opacity-50'; // Less opacity if not sent
+
+    html = `<div class="counter ${sentClass}" id="${no}">
          <div id="msg-${message_id}">
-                    <div class="w-full my-4 flex justify-between">
-
-
-                        <div class="w-[14vw] min-[400px]:w-[10vw] sm:w-[8vw] md:w-[6vw] lg:w-[5vw] mr-1 ">
-                   
-                        <a href="/profile/${user}"><img src="${pfp}" alt="img"
-                                    class="md:w-12 md:h-12 w-10 h-10 shadow-xl rounded-full object-cover">
-                            </a>
-                            
-
-                        </div>
-
-                        <div class="w-[85vw] sm:w-[92vw] md:w-[94vw]">
-
-                            <div class="flex justify-between">
-
-                                <div>
-
-                                    <small> <a href="profile/${user}">@${user}</a>,
-                                        <span data-time="${TimeUpdated}"
-                                            class="time-updated opacity-70 text-xs">
-                                        </span>
-                       <span class='is-edited text-xs opacity-50'>
-                                        ${edited_html}
-</span>
-
-                                        </small>
-
-                                    <p class="msg-paragraph" style="word-wrap:break-word;word-break: break-word;">
-                                        ${message}
-                                    </p>
-                                </div>
-                                <div class="flex">
-
-
-                                ${btn}
-                                    
-
-
-
-                                </div>
-                            </div>
-                        </div>
-
-
-
-
-
-                    </div>
-                    <hr class="h-px mt-1 bg-gray-100 border-0 dark:bg-gray-700">
+            <div class="w-full my-4 flex justify-between">
+                <div class="w-[14vw] min-[400px]:w-[10vw] sm:w-[8vw] md:w-[6vw] lg:w-[5vw] mr-1 ">
+                    <a href="/profile/${user}"><img src="${pfp}" alt="img"
+                            class="md:w-12 md:h-12 w-10 h-10 shadow-xl rounded-full object-cover">
+                    </a>
                 </div>
-                </div>`
-
-
+                <div class="w-[85vw] sm:w-[92vw] md:w-[94vw]">
+                    <div class="flex justify-between">
+                        <div>
+                            <small> <a href="profile/${user}">@${user}</a>,
+                                <span data-time="${TimeUpdated}"
+                                    class="time-updated opacity-70 text-xs"></span>
+                                <span class='is-edited text-xs opacity-50'>
+                                    ${edited_html}
+                                </span>
+                            </small>
+                            <p class="msg-paragraph" style="word-wrap:break-word;word-break: break-word;">
+                                ${message}
+                            </p>
+                        </div>
+                        <div class="flex">
+                            ${btn}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr class="h-px mt-1 bg-gray-100 border-0 dark:bg-gray-700">
+        </div>
+    </div>`;
 
     if (load) {
-        $('#chat-messages').prepend(html)
-
+        $('#chat-messages').prepend(html);
     } else {
-
-        $('#chat-messages').append(html)
+        $('#chat-messages').append(html);
     }
 
     updateTimestamps();
     window.scrollTo(0, document.body.scrollHeight);
-
 }
+
 
 
 // Initial update
