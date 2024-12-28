@@ -196,13 +196,12 @@ function AddMessage(user, message, message_id, CurrentUser, edited, TimeUpdated,
     }
 
     if (CurrentUser) {
-        btn = `  <button class="mx-2 edit-msg" data-message-id="${message_id}"><i
+        btn = `  <button class="mx-2 edit-msg"><i
         class="fa-pen fa-solid text-xs md:text-base"></i></button>
 
-                <button class="mx-2 edit-done hidden" data-message-id="${message_id}"><i
+                <button class="mx-2 edit-done hidden"><i
                         class="fa-check fa-solid text-xs md:text-base"></i></button>
-                <button class="delete-msg" data-message-id="${message_id}"
-                    data-modal-target="deleteMsg" data-modal-toggle="deleteMsg"><i
+                <button class="delete-msg" data-modal-target="deleteMsg" data-modal-toggle="deleteMsg"><i
                         class="fa-trash text-xs md:text-base text-red-700 fa-solid"></i></button>`;
     } else {
         btn = '';
@@ -259,17 +258,6 @@ function AddMessage(user, message, message_id, CurrentUser, edited, TimeUpdated,
 
 // Update timestamps every 10 seconds (adjust the interval as needed)
 setInterval(updateTimestamps, 20000); // 10000 ms = 10 seconds
-
-function UpdateMsgIndex() {
-    $.each($('#chat-messages .counter'), function (indexInArray, currentDiv) {
-        $(currentDiv).attr('id', indexInArray)
-    });
-
-}
-
-
-
-
 
 
 //style for chat 

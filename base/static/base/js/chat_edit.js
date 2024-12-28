@@ -3,8 +3,9 @@
 let message_id;
 
 $(document).on("click", ".delete-msg", function () {
+
     $('#delete-msg-btn').click()
-    message_id = $(this).data('message-id')
+    message_id = $(this).parent().parent().parent().parent().parent().attr('id').split('-')[1];
     let a = $(`#msg-${message_id} p`)
     $('#msg-txt-modal').text(a.text())
 })
@@ -12,7 +13,7 @@ $(document).on("click", ".delete-msg", function () {
 $('#delete-btn-confirm').click(function (e) {
     $(`#msg-${message_id}`).fadeOut();
     $(`#msg-${message_id}`).remove();
-    UpdateMsgIndex()
+
     $.ajax({
         data: {
             pk: message_id,
