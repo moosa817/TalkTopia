@@ -31,9 +31,10 @@ def get_info():
 @register.simple_tag
 def pfp_info(username):
     try:
+        username = User.objects.get(username=username)
         user_profile = UserProfile.objects.get(username=username)
         return user_profile
-    except UserProfile.DoesNotExist:
+    except :
         return {
             "pfp": {
                 "url": "https://dvbewjfodfte3.cloudfront.net/static/base/img/guest.webp"
@@ -42,8 +43,11 @@ def pfp_info(username):
 
 
 def pfp_url(username):
+    print(username)
     try:
-        user_profile = UserProfile.objects.get(username=username)
+        user = User.objects.get(username=username)
+        user_profile = UserProfile.objects.get(username=user)
         return user_profile.pfp.url
-    except UserProfile.DoesNotExist:
+    except :
         return "/static/base/img/guest.webp"
+    

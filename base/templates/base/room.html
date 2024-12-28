@@ -46,6 +46,8 @@
 
 
     <script src="{% static 'base/js/chat.js' %}" defer></script>
+    <script src="{% static 'base/js/chat_edit.js' %}" defer></script>
+
 </head>
 
 <body class="bg-green-50 dark:bg-primary-darktheme dark:text-white">
@@ -214,7 +216,7 @@
 
                 <div id="chat-messages" class="md:mx-10 mx-5 ">
                     {%for message in room_messages %}
-                    <div class="counter" id="{{ forloop.counter0 }}">
+                    <div class="counter" id="{{ message.msg_number }}">
                         <div id="msg-{{message.id}}">
                             <div class="w-full my-4 flex justify-between">
                                 {% pfp_info message.user as user_info %}

@@ -99,14 +99,29 @@ chatSocket.onmessage = function (e) {
     if (data.type === 'message') {
 
         let no = parseInt($('.counter').last().attr('id'))
+        if (!no) {
+            no = 0
+        }
         no = no + 1
 
         let CurrentUser
         if (data.user == USER) {
             CurrentUser = true
         }
+
+        let no_list = $('.counter').map(function () {
+            return parseInt($(this).attr('id'));
+        }).get();
+
+        console.log(no_list)
+
         console.log("message receieved")
         console.log(data)
+        if (no_list.includes(data.msg_no)) {
+            $(`#${data.msg_no}`).removeClass('opacity-50')
+            $(`#${data.msg_no} #msg-null`).attr('id', `msg-${data.id}`)
+            return
+        }
         AddMessage(data.user, data.message, data.id, CurrentUser, data.edited, data.TimeUpdated, data.pfp, no, load = false, sent = true)
 
     }
@@ -150,15 +165,23 @@ $('#chat-form').submit(function (e) {
         console.log("sending message")
 
         let no = parseInt($('.counter').last().attr('id'))
+        if (!no) {
+            no = 0
+        }
         no = no + 1
+
         AddMessage(USER, message, message_id = null, USER, edited = false, getCurrentUTCTimeFormatted(), PFP, no)
 
+        console.log(no)
+
+        console.log(getCookie('sessionid'))
         chatSocket.send(JSON.stringify({
             'action': 'sendMessage',
             'message': message,
             'user_id': USER_ID,
             'room': room_id.toString(),
-            'sessionid': getCookie('sessionid')
+            'sessionid': getCookie('sessionid'),
+            'msg_no': no
         }))
     }
 
@@ -341,83 +364,7 @@ $('#copy-invite-link').click(function () {
     $('#input-group-search').select()
 })
 
-//delete Msg 
 
-let message_id;
-
-$(document).on("click", ".delete-msg", function () {
-    $('#delete-msg-btn').click()
-    message_id = $(this).data('message-id')
-    let a = $(`#msg-${message_id} p`)
-    $('#msg-txt-modal').text(a.text())
-})
-
-$('#delete-btn-confirm').click(function (e) {
-    $(`#msg-${message_id}`).fadeOut();
-    $(`#msg-${message_id}`).remove();
-    UpdateMsgIndex()
-    $.ajax({
-        data: {
-            pk: message_id,
-            csrfmiddlewaretoken: window.CSRF_TOKEN
-        },
-        type: 'POST',
-        url: '/delete-msg'
-    })
-        .done(function (response) {
-        })
-})
-
-let message_id_edit;
-let classes = "dark:bg-gray-800 bg-gray-200 border rounded"
-
-
-$(document).on("click", ".edit-msg", function () {
-    message_id_edit = $(this).data('message-id')
-
-    $(`#msg-${message_id_edit} p`).attr('contenteditable', 'true')
-    $(`#msg-${message_id_edit} p`).addClass(classes);
-    $(`#msg-${message_id_edit} p`).focus();
-
-
-
-    $(`#msg-${message_id_edit} .edit-done`).show()
-    $(this).hide()
-
-
-})
-$(document).on('click', '.edit-done', function (e) {
-
-    message_id_edit = $(this).data('message-id')
-
-
-    $(`#msg-${message_id_edit} p`).attr('contenteditable', 'false')
-    $(`#msg-${message_id_edit} p`).removeClass(classes);
-    $(`#msg-${message_id_edit} .edit-msg`).show()
-    $(`#msg-${message_id_edit} .edit-done`).hide()
-
-
-
-
-    let msg_id = message_id_edit
-    let new_msg = $(`#msg-${message_id_edit} p`).text().trim()
-
-
-    $.ajax({
-        data: {
-            msg_id: msg_id,
-            new_msg: new_msg,
-            csrfmiddlewaretoken: window.CSRF_TOKEN
-        },
-        type: 'POST',
-        url: '/edit-msg'
-    })
-        .done(function (response) {
-            if (response.success) {
-                $(`#msg-${message_id_edit} .is-edited`).text('(edited)')
-            }
-        })
-})
 
 
 $(document).on('keypress', '.msg-paragraph', function (e) {

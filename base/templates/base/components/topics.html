@@ -32,7 +32,7 @@
 
                     </div>
                     <div class="bg-green-400 rounded-2xl text-xs font-thin text-gray-300 p-2 self-center ml-1">
-                        {{topic.room_set.all.count|add:"-1"}}
+                        {{topic.room_set.all.count}}
                     </div>
                 </div>
             </a>
@@ -55,7 +55,7 @@
                     <div class="bg-green-400 rounded-2xl text-xs text-gray-300 font-thin p-2 self-center ml-1">
                         {% for topic in info.topics %}
                         {% if topic.name == q %}
-                        {{topic.room_set.all.count}}
+                        {{topic.room_set.all.count }}
 
                         {% endif %}
                         {% endfor %}
@@ -73,9 +73,7 @@
                         More Topics <i class="fa-solid fa-arrow-down"></i>
 
                     </div>
-                    <div class="bg-green-400 rounded-2xl text-xs text-gray-300 font-thin p-2 self-center ml-1">
-                        {{info.topics.count}}
-                    </div>
+
                 </div>
             </button>
         </div>
