@@ -28,13 +28,14 @@ $('#delete-btn-confirm').click(function (e) {
 
 
 //edit message 
-let message_id_edit;
 let classes = "dark:bg-gray-800 bg-gray-200 border rounded"
 
 
 $(document).on("click", ".edit-msg", function () {
-    message_id_edit = $(this).parent().parent().parent().parent().parent().attr('id')
 
+    let message_id_edit = $(this).closest('[id^="msg-"]').attr('id').split('-')[1];
+
+    console.log(message_id_edit)
     $(`#msg-${message_id_edit} p`).attr('contenteditable', 'true')
     $(`#msg-${message_id_edit} p`).addClass(classes);
     $(`#msg-${message_id_edit} p`).focus();
@@ -48,18 +49,19 @@ $(document).on("click", ".edit-msg", function () {
 })
 $(document).on('click', '.edit-done', function (e) {
 
+
+    let message_id_edit = $(this).closest('[id^="msg-"]').attr('id').split('-')[1];
     console.log(message_id_edit)
-
-    $(`#${message_id_edit} p`).attr('contenteditable', 'false')
-    $(`#${message_id_edit} p`).removeClass(classes);
-    $(`#${message_id_edit} .edit-msg`).show()
-    $(`#${message_id_edit} .edit-done`).hide()
-
+    $(`#msg-${message_id_edit} p`).attr('contenteditable', 'false')
+    $(`#msg-${message_id_edit} p`).removeClass(classes);
+    $(`#msg-${message_id_edit} .edit-msg`).show()
+    $(`#msg-${message_id_edit} .edit-done`).hide()
 
 
 
-    let msg_id = parseInt(message_id_edit.split('-')[1])
-    let new_msg = $(`#${message_id_edit} p`).text().trim()
+
+    let msg_id = parseInt(message_id_edit)
+    let new_msg = $(`#msg-${message_id_edit} p`).text().trim()
 
     console.log(msg_id, new_msg)
     $.ajax({
@@ -74,7 +76,6 @@ $(document).on('click', '.edit-done', function (e) {
         .done(function (response) {
             if (response.success) {
                 $(`#msg-${message_id_edit} .is-edited`).text('(edited)')
-                return
             }
         })
 })
