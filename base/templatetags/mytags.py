@@ -48,4 +48,4 @@ def pfp_url(username):
         user_profile = UserProfile.objects.get(username=user)
         return user_profile.pfp.url
     except:
-        return "/static/base/img/guest.webp"
+        return "https://dvbewjfodfte3.cloudfront.net/static/base/img/guest.webp"
