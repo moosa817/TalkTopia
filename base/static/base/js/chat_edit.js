@@ -35,7 +35,6 @@ $(document).on("click", ".edit-msg", function () {
 
     let message_id_edit = $(this).closest('[id^="msg-"]').attr('id').split('-')[1];
 
-    console.log(message_id_edit)
     $(`#msg-${message_id_edit} p`).attr('contenteditable', 'true')
     $(`#msg-${message_id_edit} p`).addClass(classes);
     $(`#msg-${message_id_edit} p`).focus();
@@ -51,7 +50,6 @@ $(document).on('click', '.edit-done', function (e) {
 
 
     let message_id_edit = $(this).closest('[id^="msg-"]').attr('id').split('-')[1];
-    console.log(message_id_edit)
     $(`#msg-${message_id_edit} p`).attr('contenteditable', 'false')
     $(`#msg-${message_id_edit} p`).removeClass(classes);
     $(`#msg-${message_id_edit} .edit-msg`).show()
@@ -63,7 +61,6 @@ $(document).on('click', '.edit-done', function (e) {
     let msg_id = parseInt(message_id_edit)
     let new_msg = $(`#msg-${message_id_edit} p`).text().trim()
 
-    console.log(msg_id, new_msg)
     $.ajax({
         data: {
             msg_id: msg_id,

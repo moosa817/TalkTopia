@@ -86,16 +86,33 @@ let url = window.WS_URL + '?room=' + room_id
 const chatSocket = new ReconnectingWebSocket(url);
 
 chatSocket.onopen = function (e) {
-    console.log('Connected to chat socket')
+    console.info('Connected to chat socket')
     // one sec sleep
     setTimeout(function () {
         $('#content').fadeIn();
         $('#load-div').fadeOut();
+        window.scrollTo(0, document.body.scrollHeight);
+
     }, 1000)
+
 }
 
 chatSocket.onmessage = function (e) {
     let data = JSON.parse(e.data);
+
+    if (data.type === 'edit') {
+        let msg_id = data.msg_id
+        let new_msg = data.new_msg
+
+        $(`#msg-${msg_id} .msg-paragraph`).text(new_msg)
+        $(`#msg-${msg_id} .is-edited`).text('(edited)')
+    }
+
+    if (data.type === 'delete') {
+        let msg_id = data.msg_id
+        $(`#msg-${msg_id}`).remove()
+    }
+
     if (data.type === 'message') {
 
         let no = parseInt($('.counter').last().attr('id'))
@@ -113,10 +130,7 @@ chatSocket.onmessage = function (e) {
             return parseInt($(this).attr('id'));
         }).get();
 
-        console.log(no_list)
 
-        console.log("message receieved")
-        console.log(data)
         if (no_list.includes(data.msg_no)) {
             $(`#${data.msg_no}`).removeClass('opacity-50')
             $(`#${data.msg_no} #msg-null`).attr('id', `msg-${data.id}`)
@@ -162,7 +176,6 @@ $('#chat-form').submit(function (e) {
     if (message == "") {
 
     } else {
-        console.log("sending message")
 
         let no = parseInt($('.counter').last().attr('id'))
         if (!no) {
@@ -172,9 +185,7 @@ $('#chat-form').submit(function (e) {
 
         AddMessage(USER, message, message_id = null, USER, edited = false, getCurrentUTCTimeFormatted(), PFP, no)
 
-        console.log(no)
 
-        console.log(getCookie('sessionid'))
         chatSocket.send(JSON.stringify({
             'action': 'sendMessage',
             'message': message,
@@ -400,5 +411,4 @@ $('#loadmore').click(function (e) {
 
 
 
-window.scrollTo(0, document.body.scrollHeight);
 

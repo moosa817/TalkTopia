@@ -34,7 +34,7 @@ def pfp_info(username):
         username = User.objects.get(username=username)
         user_profile = UserProfile.objects.get(username=username)
         return user_profile
-    except :
+    except:
         return {
             "pfp": {
                 "url": "https://dvbewjfodfte3.cloudfront.net/static/base/img/guest.webp"
@@ -43,11 +43,9 @@ def pfp_info(username):
 
 
 def pfp_url(username):
-    print(username)
     try:
         user = User.objects.get(username=username)
         user_profile = UserProfile.objects.get(username=user)
         return user_profile.pfp.url
-    except :
+    except:
         return "/static/base/img/guest.webp"
-    

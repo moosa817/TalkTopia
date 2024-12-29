@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from ..models import Room, UserProfile, Message
+from ..models import Room, UserProfile, Message, WebsocketSessions
 from django.db.models import Q
 from django.contrib.auth.models import User
 from django.contrib import messages
@@ -14,6 +14,14 @@ from django.http import HttpResponseNotFound
 from django.conf import settings
 from django.core import serializers
 from ..templatetags.mytags import pfp_url
+import boto3
+import json
+
+url = "l0tul12oja.execute-api.us-east-1.amazonaws.com"
+stage = "production"
+apigatewaymanagementapi = boto3.client(
+    "apigatewaymanagementapi", endpoint_url="https://" + url + "/" + stage
+)
 
 
 def room(request, pk):
@@ -49,11 +57,32 @@ def deleteMessage(request):
     if request.method == "POST":
         pk = request.POST.get("pk")
         if pk:
-            message = Message.objects.get(id=pk)
+            try:
+                message = Message.objects.get(id=pk)
+            except Message.DoesNotExist:
+                return JsonResponse({"success": False})
             if request.user != message.user:
                 return JsonResponse({"success": False})
             else:
                 message.delete()
+                mydata = {
+                    "type": "delete",
+                    "msg_id": pk,
+                }
+                mydata = json.dumps(mydata)
+                connectionIds = WebsocketSessions.objects.filter(
+                    room_id=message.room.id
+                )
+                for conn_id in connectionIds:
+                    try:
+                        apigatewaymanagementapi.post_to_connection(
+                            Data=mydata, ConnectionId=conn_id.conn_id
+                        )
+
+                    except Exception as e:
+                        WebsocketSessions.objects.filter(
+                            conn_id=conn_id.conn_id
+                        ).delete()
                 return JsonResponse({"success": True})
         else:
             return JsonResponse({"success": False})
@@ -76,6 +105,27 @@ def EditMessage(request):
                 msg.body = new_msg
                 msg.edited = True
                 msg.save()
+
+                mydata = {
+                    "type": "edit",
+                    "msg_id": msg_id,
+                    "new_msg": new_msg,
+                }
+
+                mydata = json.dumps(mydata)
+                connectionIds = WebsocketSessions.objects.filter(room_id=msg.room.id)
+
+                for conn_id in connectionIds:
+                    try:
+                        apigatewaymanagementapi.post_to_connection(
+                            Data=mydata, ConnectionId=conn_id.conn_id
+                        )
+
+                    except Exception as e:
+                        WebsocketSessions.objects.filter(
+                            conn_id=conn_id.conn_id
+                        ).delete()
+
                 return JsonResponse({"success": True})
 
     return JsonResponse({"success": False})

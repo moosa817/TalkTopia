@@ -43,9 +43,6 @@ def home(request):
     rooms = rooms[start_page:end_page]
     last_page = room_count // one_page + (room_count % one_page > 0)
 
-    print(room_count)
-
-    print(topics_only)
     context = {
         "rooms": rooms,
         "q": q,
